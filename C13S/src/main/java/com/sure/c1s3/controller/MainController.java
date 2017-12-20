@@ -1,18 +1,30 @@
 package com.sure.c1s3.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.sure.c1s3.service.MainService;
+import com.sure.c1s3.vo.TeamVo;
 
 
 @Controller
 public class MainController {
 	
+	
+	@Autowired
+	private MainService mainService;
 	/**
 	 * 로드맵 메인
 	 */
 	@RequestMapping("/roadmapMain")
 	public String roadmapMain(Model model) {
+		
+		List<TeamVo> timeV = mainService.getTeamList();
+		System.out.println(timeV);
 		
 		return "main";
 	}
