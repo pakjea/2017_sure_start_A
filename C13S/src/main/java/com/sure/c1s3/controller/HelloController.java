@@ -1,4 +1,4 @@
-package com.example.c1s3;
+package com.sure.c1s3.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,4 +13,5 @@ public class HelloController {
 		
 		return "hello";
 	}
+	
 }

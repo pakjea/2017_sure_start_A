@@ -1,4 +1,4 @@
-package com.c1s3.controller;
+package com.sure.c1s3.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
