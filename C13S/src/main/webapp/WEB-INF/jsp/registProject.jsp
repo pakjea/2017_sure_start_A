@@ -3,9 +3,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Hello JSP</title>
+<title>프로젝트 등록</title>
 </head>
 <body>
-    메인화면입니다.
+    프로젝트 등록
 </body>
 </html>
