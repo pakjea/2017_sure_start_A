@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -90,10 +91,6 @@ $(document).ready(function() {
  	$("#registMilestoneBtn").on("click", function() {
  		$('#milestoneModal').modal('show');
  	});
- 	
-//  	$("#modifyMilestoneBtn").on("click", function() {
-//  		$('#milestoneModal').modal('show');
-//  	});
  	
  	$("#deleteMilestoneBtn").on("click", function() {
  		alert("마일스톤 삭제");
@@ -187,9 +184,6 @@ $(document).ready(function() {
 			<button type="button" class="btn btn-primary" id="deleteProjectBtn">프로젝트 삭제</button>
 			
 			<button type="button" class="btn btn-primary" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 추가</button>
-<!-- 			<button type="button" class="btn btn-primary" id="modifyMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 수정</button> -->
-<!-- 			<button type="button" class="btn btn-primary" id="deleteMilestoneBtn" >마일스톤 삭제</button> -->
-			
 			<button type="button" class="btn btn-primary" id="goHistory">로그 확인</button>
 			
 			<div>

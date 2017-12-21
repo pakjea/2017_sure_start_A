@@ -16,7 +16,6 @@ import com.sure.c1s3.vo.TeamVo;
 @Controller
 public class MainController {
 	
-	
 	@Autowired
 	private MainService mainService;
 	/**
@@ -27,7 +26,6 @@ public class MainController {
 		
 		List<TeamVo> teamList = mainService.selectTeamList();
 		model.addAttribute("teamList", teamList);
-		System.out.println("Hi there!!");
 		return "roadmapMain";
 	}
 	
@@ -43,15 +41,15 @@ public class MainController {
 	/**
 	 * 프로젝트 등록
 	 */
-	@RequestMapping(value="/saveProject",method=RequestMethod.POST)
+	@RequestMapping(value="/registProject", method=RequestMethod.POST)
 	public ModelAndView registProject(ProjectVo project) {
-//		System.out.println(project.getT_Id());
-//		System.out.println("I got it!!");
-		
+
 		ModelAndView mav = new ModelAndView("roadmapMain");
-		mav.addObject("result", true);
+		
 		List<TeamVo> teamList = mainService.selectTeamList();
 		mav.addObject("teamList", teamList);
+		mav.addObject("result", true);
+		
 		return mav;
 		
 	}
