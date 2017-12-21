@@ -169,9 +169,9 @@ $(document).ready(function() {
 	  <div class="row">
 		<div class="col">
 			<h1>팀</h1>
-			<div class="input-group">
+			<div class="form-check">
 				<c:forEach items="${teamList}" var="team">
-			 		<input type="checkbox"><label for="teamId">${team.t_Name}</label><br>
+			 		<label class="form-check-label" for="teamId"><input class="form-check-input" type="checkbox" value="${team.t_Id}">${team.t_Name}</label><br>
 				</c:forEach>
 			</div>
 		</div><!-- .left -->
@@ -179,14 +179,18 @@ $(document).ready(function() {
 		<div class="col-10">
 			<h1>슈어소프트테크</h1>
 			
-			<button type="button" class="btn btn-primary" id="registProjectBtn" data-toggle="modal" data-target="#registProjectModal" data-whatever="">프로젝트 등록</button>
-			<button type="button" class="btn btn-default" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
-			<button type="button" class="btn btn-default" id="deleteProjectBtn">프로젝트 삭제</button>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-primary" id="registProjectBtn" data-toggle="modal" data-target="#registProjectModal" data-whatever="">프로젝트 등록</button>
+				<button type="button" class="btn btn-default" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
+				<button type="button" class="btn btn-default" id="deleteProjectBtn">프로젝트 삭제</button>
+			</div>
 			
-			<button type="button" class="btn btn-default" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 추가</button>
-			<button type="button" class="btn btn-default" id="goHistory">로그 확인</button>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-default" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 추가</button>
+				<button type="button" class="btn btn-default" id="goHistory">로그 확인</button>
+			</div>
 			
-			<div>
+			<div style="margin-top:10px">
 				<div id="visualization"></div>
 			</div>
 			
