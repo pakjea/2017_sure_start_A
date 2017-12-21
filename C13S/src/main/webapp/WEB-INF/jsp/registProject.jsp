@@ -17,7 +17,6 @@
  		
  		$("#cancelRegPjtBtn").on("click", function() {
  			$('#registProjectModal').find('input').val("");
-//  			$('#registProjectModal').modal('hide');
  		});
  	});
  </script>
@@ -66,7 +65,7 @@
 		</div>
 		</div>
 		
-		<button type="submit" class="btn btn-primary">저장</button>
+		<button type="submit" class="btn btn-primary">등록</button>
 		<button type="button" class="btn btn-primary" data-dismiss="modal" id="cancelRegPjtBtn">취소</button>
 	</form>
  	

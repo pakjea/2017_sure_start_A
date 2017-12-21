@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sure.c1s3.service.MainService;
+import com.sure.c1s3.vo.HistoryVo;
 import com.sure.c1s3.vo.ProjectVo;
 import com.sure.c1s3.vo.TeamVo;
 
@@ -51,7 +52,6 @@ public class MainController {
 		mav.addObject("result", true);
 		
 		return mav;
-		
 	}
 	
 //	class TestMe{
@@ -84,10 +84,16 @@ public class MainController {
 	/**
 	 * 프로젝트 변경
 	 */
-	@RequestMapping("/modifyProject")
-	public String modifyProject(Model model) {
+	@RequestMapping(value="/modifyProject", method=RequestMethod.POST)
+	public ModelAndView modifyProject(ProjectVo project, HistoryVo history) {
 		
-		return "modifyProject";
+		ModelAndView mav = new ModelAndView("roadmapMain");
+		
+		List<TeamVo> teamList = mainService.selectTeamList();
+		mav.addObject("teamList", teamList);
+		mav.addObject("result", true);
+		
+		return mav;
 	}
 	
 	/**

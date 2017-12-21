@@ -180,11 +180,11 @@ $(document).ready(function() {
 			<h1>슈어소프트테크</h1>
 			
 			<button type="button" class="btn btn-primary" id="registProjectBtn" data-toggle="modal" data-target="#registProjectModal" data-whatever="">프로젝트 등록</button>
-			<button type="button" class="btn btn-primary" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
-			<button type="button" class="btn btn-primary" id="deleteProjectBtn">프로젝트 삭제</button>
+			<button type="button" class="btn btn-default" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
+			<button type="button" class="btn btn-default" id="deleteProjectBtn">프로젝트 삭제</button>
 			
-			<button type="button" class="btn btn-primary" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 추가</button>
-			<button type="button" class="btn btn-primary" id="goHistory">로그 확인</button>
+			<button type="button" class="btn btn-default" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 추가</button>
+			<button type="button" class="btn btn-default" id="goHistory">로그 확인</button>
 			
 			<div>
 				<div id="visualization"></div>
