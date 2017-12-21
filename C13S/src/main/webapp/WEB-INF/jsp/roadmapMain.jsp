@@ -59,14 +59,14 @@
 			<h1>슈어소프트테크</h1>
 			
 			<button type="button" class="btn btn-primary" id="registProjectBtn" data-toggle="modal" data-target="#registProjectModal" data-whatever="">프로젝트 등록</button>
-			<button type="button" class="btn btn-primary" id="modifyProjectBtn" data-toggle="modal" data-target="" data-whatever="">프로젝트 수정</button>
-			<button type="button" class="btn btn-primary" id="deleteProjectBtn" data-toggle="modal" data-target="" data-whatever="">프로젝트 삭제</button>
+			<button type="button" class="btn btn-primary" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
+			<button type="button" class="btn btn-primary" id="deleteProjectBtn">프로젝트 삭제</button>
 			
-			<button type="button" class="btn btn-primary" id="registMilestoneBtn" data-toggle="modal" data-target="" data-whatever="">마일스톤 추가</button>
-			<button type="button" class="btn btn-primary" id="modifyMilestoneBtn" data-toggle="modal" data-target="" data-whatever="">마일스톤 수정</button>
-			<button type="button" class="btn btn-primary" id="deleteMilestoneBtn" data-toggle="modal" data-target="" data-whatever="">마일스톤 삭제</button>
+			<button type="button" class="btn btn-primary" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 추가</button>
+			<button type="button" class="btn btn-primary" id="modifyMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 수정</button>
+			<button type="button" class="btn btn-primary" id="deleteMilestoneBtn" >마일스톤 삭제</button>
 			
-			<button type="button" class="btn btn-primary" id="goHistory" data-toggle="modal" data-target="" data-whatever="">로그 확인</button>
+			<button type="button" class="btn btn-primary" id="goHistory">로그 확인</button>
 			
 			<div>
 				타임라인 영역
