@@ -1,12 +1,15 @@
 package com.sure.c1s3.vo;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class HistoryVo {
 	private String his_Id;
 	private String his_Cntnt;
 	private String p_Id;
 	private String t_Id;
-	private String rgst_DT;
-	private String updt_DT;
+	private String rgst_Dt;
+	private String updt_Dt;
 	
 	public String getHis_Id() {
 		return his_Id;
@@ -32,16 +35,20 @@ public class HistoryVo {
 	public void setT_Id(String t_Id) {
 		this.t_Id = t_Id;
 	}
-	public String getRgst_DT() {
-		return rgst_DT;
+	public String getRgst_Dt() {
+		return rgst_Dt;
 	}
-	public void setRgst_DT(String rgst_DT) {
-		this.rgst_DT = rgst_DT;
+	public void setRgst_Dt(String rgst_Dt) {
+		this.rgst_Dt = rgst_Dt;
 	}
-	public String getUpdt_DT() {
-		return updt_DT;
+	public String getUpdt_Dt() {
+		return updt_Dt;
 	}
-	public void setUpdt_DT(String updt_DT) {
-		this.updt_DT = updt_DT;
+	public void setUpdt_Dt(String updt_Dt) {
+		this.updt_Dt = updt_Dt;
+	}
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 }

@@ -4,6 +4,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+<%
+String contextPath = request.getContextPath();
+%>
+<script type="text/javascript">
+    var rootContextPath = "<%=contextPath%>";
+</script>
+
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  <title>메인</title>
@@ -11,8 +19,10 @@
  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
- <script src="http://visjs.org/dist/vis.js"></script>
- <link href="http://visjs.org/dist/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+<%--  <script src="<%=request.getContextPath()%>/js/vis.min.js"></script> --%>
+<%--  <link href="<%=request.getContextPath()%>/css/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" /> --%>
+<script src="http://visjs.org/dist/vis.js"></script> 
+<link href="http://visjs.org/dist/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
  <style>
 body {
     font-family: "Spoqa Han Sans",Malgun Gothic,"맑은 고딕",Dotum,"돋움",sans-serif;
@@ -74,13 +84,27 @@ body {
 </style>
 <script>
 
+
 $(document).ready(function() {
+	
 	/* ############## 버튼 이벤트  ################ */
 	$("#registProjectBtn").on("click", function() {
  		$('#registProjectModal').modal('show');
  	});
  	
  	$("#modifyProjectBtn").on("click", function() {
+ 		
+ 		$.ajax({
+ 			url			: rootContextPath + "/modifyProject.ajax",
+ 			type		: "post",
+ 			dataType 	: "json",
+ 			async       : false,
+ 			data		: { "p_Id" : "000001" },
+ 			success		: function(result) {
+ 				myInfoObj = result.rows;
+ 				fnSetInfo(myInfoObj);
+ 			}
+ 		});
  		$('#modifyProjectModal').modal('show');
  	});
  	
@@ -101,41 +125,47 @@ $(document).ready(function() {
  	});
  	/* ############## 버튼 이벤트  ################ */
  	
- 	
+ 	/* ############## 결과 이벤트  ################ */
+ 	var result = ${result};
+ 	if(result == 1) {
+ 		alert("저장이 완료되었습니다.");
+ 	} else if(result == 0) {
+ 		alert("저장에 실패했습니다.");
+ 	} 
+ 	/* ############## 결과 이벤트  ################ */
  	
  	/* ############## 타임라인 그래프  ################ */
 
-	csGroup=["cs1","cs2"]; //cs프로젝트
-	qsGroup=["qs1","qs2"]; 
-	carGroup=["car1","car2"];
-	seGroup=["se1","se2"];
-	
+// 	//var csGroup	=; //cs프로젝트
+// 	var qsGroup	; 
+// 	var carGroup=;
+// 	var seGroup	=;
 	
 	// timeline을 넣을 곳,
 	var container = document.getElementById('visualization');
 	
 	//group 생성, 일부러 nested 그룹도 생성    
 	var groups = new vis.DataSet([
-	     {id: "cs", content: 'CS',nestedGroups:csGroup },
+	     {id: "cs", content: 'CS',nestedGroups:["cs1","cs2"] },
 	     {id: "cs1", content: "프로젝트  CS1"},
 	     {id: "cs2", content: "프로젝트  CS2"},
 	     
-	     {id: "qs", content: 'QS',nestedGroups:qsGroup },
+	     {id: "qs", content: 'QS',nestedGroups:[] },
 	     {id: "qs1", content: "프로젝트 CS1"},
 	     {id: "qs2", content: "프로젝트 QS2"},
 	     
-	     {id: "carS", content: '차량솔루션센터',nestedGroups:carGroup },
+	     {id: "carS", content: '차량솔루션센터',nestedGroups:["car1","car2"] },
 	     {id: "car1", content: "프로젝트 CAR1"},
 	     {id: "car2", content: "프로젝트 CAR2"},
 	     
-	     {id: "se", content: 'SE',nestedGroups:seGroup },
+	     {id: "se", content: 'SE',nestedGroups:["se1","se2"] },
 	     {id: "se1", content: "프로젝트 SE1"},
 	     {id: "se2", content: "프로젝트 SE2"},
 	]);
 	
 	// 각 그룹에 표시할 데이타 생성 및 연결
 	var items = new vis.DataSet([
-	   {id: 1, content: "계획", start: '2017-03-01', end: '2017-03-30', type: "background" ,group: "cs1"},
+	   {id: 1, content: "계획", start: '2017-03-01', end: '2017-03-30' ,group: "cs1"},
 	   {id: 2, content: "", start: '2017-03-08', type:"point" , group: "cs1",title:"Hello"}
 	]);
 	

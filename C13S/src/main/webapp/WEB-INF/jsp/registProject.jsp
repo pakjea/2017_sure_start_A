@@ -38,9 +38,9 @@
 		<div class="form-group">
 		<label for="projectDate">프로젝트 일정</label>
 		<div class="input-group">
-		  <input type="date" class="form-control" id="startDate" name="st_DT" value="${today}" required>
+		  <input type="date" class="form-control" id="startDate" name="st_Dt" value="${today}" required>
 		  <div class="input-group-addon">to</div>
-		  <input type="date" class="form-control" id="endDate" name="ed_DT" value="${today}" required>
+		  <input type="date" class="form-control" id="endDate" name="ed_Dt" value="${today}" required>
 		</div>
 		</div>
 		
