@@ -4,30 +4,78 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
  <title>마일스톤</title>
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+ <link rel="stylesheet" href="/css/slick.grid.css" type="text/css"/>
+ <link rel="stylesheet" href="/css/jquery-ui-1.8.16.custom.css" type="text/css"/>
+ <link rel="stylesheet" href="/css/example.css" type="text/css"/>
+ 
+ <script src="/js/jquery-1.7.min.js"></script>
+ <script src="/js/jquery.event.drag-2.2.js"></script>
+ 
+ <script src="/js/slick.core.js"></script>
+ <script src="/js/slick.grid.js"></script>
+ 
+ <script>
+  var grid;
+  var columns = [
+    {id: "ms_Dt", name: "일자", field: "ms_Dt"},
+    {id: "ms_Cntnt", name: "내용", field: "ms_Cntnt"},
+    {id: "writer", name: "작성자", field: "writer"},
+  ];
+  var options = {
+    enableCellNavigation: true,
+    enableColumnReorder: false,
+    forceFitColumns: true
+  }
+  $(function () {
+    var data = [];
+    for (var i = 0; i < 100; i++) {
+      data[i] = {
+    		  ms_Dt: "일자 " + i,
+    		  ms_Cntnt: "마일스톤 내용" + i,
+    		  writer: "작성자" + i
+      };
+    }
+    grid = new Slick.Grid("#myGrid", data, columns, options);
+    
+    //grid.invalidate();
+  })
+ </script>
 </head>
 <body>
-    
-    <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
-	  추가
-	</button>
-	<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
-	  삭제
-	</button>
+	<div class="row">	
+		<div class="col-12">
+			<div class="btn-group float-right" role="group">
+			    <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
+				  추가
+				</button>
+				<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
+				  삭제
+				</button>
+			</div>
+		</div>
+	</div>
 	
-    <div>
-    	그리드 영역
+    <div class="row">	
+		<div class="col-12">
+	    	<div id="myGrid" style="width:460px;height:200px;margin:5px;"></div>
+	    </div>
     </div>
 	
-	<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
-	  저장
-	</button>
-	<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
-	  취소
-	</button>
+	<div class="row">	
+		<div class="col-12">
+			<div class="btn-group text-center" role="group">
+				<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
+				  저장
+				</button>
+				<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
+				  취소
+				</button>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>
