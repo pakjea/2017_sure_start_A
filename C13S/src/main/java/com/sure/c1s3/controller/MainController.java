@@ -122,7 +122,7 @@ public class MainController {
 	  	for (MilestoneVo vo : milestone) {
 	        JSONObject jsonObj = new JSONObject();
 	        jsonObj.put("group",vo.getP_Id());
-	        //jsonObj.put("start", vo.getSt_Dt());//마일스톤 날짜
+	        jsonObj.put("start", vo.getMs_Dt());//마일스톤 날짜
 	        jsonObj.put("type", "point");
 	        jsonObj.put("id", "m"+vo.getP_Id());
 	        jsonObj.put("content","");

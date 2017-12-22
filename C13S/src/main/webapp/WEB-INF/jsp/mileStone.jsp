@@ -10,11 +10,24 @@
  <link rel="stylesheet" href="/css/slick.grid.css" type="text/css"/>
  <link rel="stylesheet" href="/css/jquery-ui-1.8.16.custom.css" type="text/css"/>
  <link rel="stylesheet" href="/css/example.css" type="text/css"/>
+ <link rel="stylesheet" href="/controls/slick.columnpicker.css" type="text/css"/>
+ <style>
+    .slick-cell-checkboxsel {
+      background: #f0f0f0;
+      border-right-color: silver;
+      border-right-style: solid;
+    }
+ </style>
  
  <script src="/js/jquery-1.7.min.js"></script>
  <script src="/js/jquery.event.drag-2.2.js"></script>
  
  <script src="/js/slick.core.js"></script>
+ 
+ <script src="/plugins/slick.rowselectionmodel.js"></script>
+ <script src="/controls/slick.columnpicker.js"></script>
+ <script src="/js/slick.formatters.js"></script>
+ <script src="/js/slick.editors.js"></script>
  <script src="/js/slick.grid.js"></script>
  <script src="/js/slick.dataview.js"></script>
  
@@ -44,17 +57,25 @@
   });
   
   $(function () {
-//     var data = [];
-//     for (var i = 0; i < 100; i++) {
-//       data[i] = {
-//     		  ms_Dt: "일자 " + i,
-//     		  ms_Cntnt: "마일스톤 내용" + i,
-//     		  writer: "작성자" + i
-//       };
-//     }
+	  
+	// 그리드 생성
     grid = new Slick.Grid("#myGrid", dataView, columns, options);
+    grid.setSelectionModel(new Slick.RowSelectionModel());
     
     //grid.invalidate();
+    
+    $("#msRowAddBtn").on("click", function() {
+    	 dataView.addItem({ms_Id: "0", ms_Dt: "1", ms_Cntnt: "", writer:""});
+    	 dataView.refresh();
+    });
+    
+	$("#msRowDelBtn").on("click", function() {
+		var selectedRowIds = grid.getSelectedRows();
+		var selectedRowId = 0;
+		
+    	dataView.deleteItem(selectedRowId);
+    	dataView.refresh();
+    });
     
   });
   
@@ -81,10 +102,10 @@
 	<div class="row">	
 		<div class="col-12">
 			<div class="btn-group float-right" role="group">
-			    <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
+			    <button type="button" class="btn btn-primary" id="msRowAddBtn">
 				  추가
 				</button>
-				<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
+				<button type="button" class="btn btn-primary" id="msRowDelBtn">
 				  삭제
 				</button>
 			</div>
@@ -98,12 +119,12 @@
     </div>
 	
 	<div class="row">	
-		<div class="col-12">
-			<div class="btn-group text-center" role="group">
-				<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
+		<div class="col-12 text-center">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-primary">
 				  저장
 				</button>
-				<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">
 				  취소
 				</button>
 			</div>
