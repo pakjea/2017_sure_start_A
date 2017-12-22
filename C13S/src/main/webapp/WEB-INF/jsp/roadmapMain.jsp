@@ -121,6 +121,21 @@ $(document).ready(function() {
  	$("#goHistory").on("click", function() {
  		alert("프로젝트 변경이력 화면 이동");
  	});
+ 	
+ 	$(document).ready(function(){
+ 	    $("#100001").change(function(){
+ 	        if($("#100001").is(":checked")){
+ 	        	alert("OMG");
+ 	        	$('vis-label vis-nesting-group STAT collapsed').attr('class','vis-label vis-nesting-group expanded STAT');
+ 	        
+ 	        }else{
+ 	        	alert("What the Fuck MAN!!");
+
+ 	        	$('vis-label vis-nesting-group expanded STAT').attr('class','vis-label vis-nesting-group STAT collapsed');
+ 	       }
+ 	    });
+ 	});
+ 	
  	/* ############## 버튼 이벤트  ################ */
  	
  	/* ############## 결과 이벤트  ################ */
@@ -180,7 +195,7 @@ $(document).ready(function() {
 			<h1>팀</h1>
 			<div class="form-check">
 				<c:forEach items="${teamList}" var="team">
-			 		<label class="form-check-label" for="teamId"><input class="form-check-input" type="checkbox" value="${team.t_Id}">${team.t_Name}</label><br>
+			 		<label class="form-check-label" id="${team.t_Id}" for="teamId"><input class="form-check-input" type="checkbox" value="${team.t_Id}">${team.t_Name}</label><br>
 				</c:forEach>
 			</div>
 		</div><!-- .left -->
