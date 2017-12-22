@@ -10,6 +10,7 @@ public class HistoryVo {
 	private String t_Id;
 	private String rgst_Dt;
 	private String updt_Dt;
+	private String emp_Name;
 	
 	public String getHis_Id() {
 		return his_Id;
@@ -46,6 +47,12 @@ public class HistoryVo {
 	}
 	public void setUpdt_Dt(String updt_Dt) {
 		this.updt_Dt = updt_Dt;
+	}
+	public String getEmp_Name() {
+		return emp_Name;
+	}
+	public void setEmp_Name(String emp_Name) {
+		this.emp_Name = emp_Name;
 	}
 	@Override
 	public String toString() {

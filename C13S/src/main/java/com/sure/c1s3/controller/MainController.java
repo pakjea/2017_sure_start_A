@@ -38,6 +38,8 @@ public class MainController {
 		model.addAttribute("teamList", teamList);
 		
 		List<ProjectVo> projectList = mainService.selectProjectList();
+		model.addAttribute("projectAllList", projectList);
+		
       	List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
       	JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
       	model.addAttribute("projectList", jsonArr);
@@ -64,6 +66,8 @@ public class MainController {
       mav.addObject("teamList", teamList);
       
       List<ProjectVo> projectList = mainService.selectProjectList();
+      mav.addObject("projectAllList", projectList);
+      
       List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
       JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
       mav.addObject("projectList", jsonArr);
@@ -93,8 +97,8 @@ public class MainController {
 	            if (teamId.equals(vo.getT_Id())) {
 	            	nest.add(vo.getP_Id());
 	            	JSONObject jsonObj = new JSONObject();
-	            	jsonObj.put("id", vo.getP_Id() );
-	            	jsonObj.put("content", vo.getP_Name());
+	            	jsonObj.put("id"		, vo.getP_Id() );
+	            	jsonObj.put("content"	, vo.getP_Name());
 	            	jsonArr.put(jsonObj);
 	           	}
 	        }
@@ -106,27 +110,29 @@ public class MainController {
 	}
 
    public JSONArray getProjectInformation(List<TeamVo> teamList, List<ProjectVo> projectList, List<MilestoneVo> milestone) throws JSONException {
-		JSONArray jsonArr = new JSONArray(); 
+		
+	   JSONArray jsonArr = new JSONArray(); 
 	         
 	  	for (ProjectVo vo : projectList) {
 	    	JSONObject jsonObj = new JSONObject();
-	      	jsonObj.put("group",vo.getP_Id());
-	      	jsonObj.put("start", vo.getSt_Dt());
-	    	jsonObj.put("end", vo.getEd_Dt());
-	    	jsonObj.put("type", "background");
-	   		jsonObj.put("id", vo.getP_Id());
-	    	jsonObj.put("content", vo.getP_Name());
+	      	jsonObj.put("group"		, vo.getP_Id());
+	      	jsonObj.put("className"	, vo.getP_Id());
+	      	jsonObj.put("start"		, vo.getSt_Dt());
+	    	jsonObj.put("end"		, vo.getEd_Dt());
+	    	jsonObj.put("type"		, "background");
+	   		jsonObj.put("id"		, vo.getP_Id());
+	    	jsonObj.put("content"	, vo.getP_Name());
 	       	jsonArr.put(jsonObj);          	
 	  	}
 	        
 	  	for (MilestoneVo vo : milestone) {
 	        JSONObject jsonObj = new JSONObject();
-	        jsonObj.put("group",vo.getP_Id());
-	        //jsonObj.put("start", vo.getSt_Dt());//마일스톤 날짜
-	        jsonObj.put("type", "point");
-	        jsonObj.put("id", "m"+vo.getP_Id());
-	        jsonObj.put("content","");
-	        jsonObj.put("titlet", vo.getMs_Cntnt());
+	        jsonObj.put("group"		, vo.getP_Id());
+	        jsonObj.put("start"		, vo.getMs_Dt());//마일스톤 날짜
+	        jsonObj.put("type"		, "point");
+	        jsonObj.put("id"		, "m"+vo.getP_Id());
+	        jsonObj.put("content"	,"");
+	        jsonObj.put("titlet"	, vo.getMs_Cntnt());
 	        jsonArr.put(jsonObj);
 	            
 		}
@@ -135,9 +141,10 @@ public class MainController {
    
    /**
     * 프로젝트 변경
+ * @throws JSONException 
     */
-   @RequestMapping(value="/modifyProject.ajax",method=RequestMethod.POST)
-   public ModelAndView modifyProject(ProjectVo projectVo) {
+   @RequestMapping(value="/modifyProject",method=RequestMethod.POST)
+   public ModelAndView modifyProject(ProjectVo projectVo) throws JSONException {
       
       int result = mainService.updateProject(projectVo);
       ModelAndView mav = new ModelAndView("roadmapMain");
@@ -145,21 +152,43 @@ public class MainController {
       
       List<TeamVo> teamList = mainService.selectTeamList();
       mav.addObject("teamList", teamList);
+      
+      List<ProjectVo> projectList = mainService.selectProjectList();
+      mav.addObject("projectAllList", projectList);
+      
+      List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
+      JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
+      mav.addObject("projectList", jsonArr);
+
+	  JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
+	  mav.addObject("projectGroup", jsonArrGroup);
+      
       return mav;   
    }
    
    /**
     * 프로젝트 삭제
+ * @throws JSONException 
     */
    @RequestMapping(value="/deleteProject",method=RequestMethod.POST)
-   public ModelAndView deleteProject(String p_Id) {
-      
+   public ModelAndView deleteProject(String p_Id) throws JSONException {
+	   
       int result = mainService.deleteProject(p_Id);
       ModelAndView mav = new ModelAndView("roadmapMain");
       mav.addObject("result", result);
       
       List<TeamVo> teamList = mainService.selectTeamList();
       mav.addObject("teamList", teamList);
+      
+      List<ProjectVo> projectList = mainService.selectProjectList();
+      mav.addObject("projectAllList", projectList);
+      
+      List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
+      JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
+      mav.addObject("projectList", jsonArr);
+
+	  JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
+	  mav.addObject("projectGroup", jsonArrGroup);
       return mav;   
    }
    

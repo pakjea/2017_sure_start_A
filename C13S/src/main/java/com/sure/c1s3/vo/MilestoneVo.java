@@ -11,6 +11,7 @@ public class MilestoneVo {
 	private String ms_Dt;
 	private String rgst_Dt;
 	private String updt_Dt;
+	private String writer;
 	
 	public String getP_Id() {
 		return p_Id;
@@ -54,7 +55,12 @@ public class MilestoneVo {
 	public void setUpdt_Dt(String updt_Dt) {
 		this.updt_Dt = updt_Dt;
 	}
-	
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);

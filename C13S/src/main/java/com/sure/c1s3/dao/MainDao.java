@@ -20,7 +20,7 @@ public interface MainDao {
 	List<TeamVo> selectTeam();
 	
 	// Project
-	@Select("SELECT P_ID, T_ID, P_NAME, P_CNTNT, ST_DT, ED_DT, P_MM, RGST_DT, UPDT_DT FROM teamA.PROJECT")
+	@Select("SELECT P_ID, T_ID, P_NAME, P_CNTNT, ST_DT, ED_DT, P_MM, RGST_DT, UPDT_DT FROM teamA.PROJECT ORDER BY T_ID, P_ID")
 	List<ProjectVo> selectProject();
 	
 	@Insert("INSERT INTO teamA.PROJECT(P_ID, T_ID, P_NAME, P_CNTNT, ST_DT, ED_DT, P_MM, RGST_DT)"
@@ -29,7 +29,7 @@ public interface MainDao {
 	int insertProject(ProjectVo projectVo);
 	
 	@Update("UPDATE teamA.PROJECT "
-			+ " SET P_NAME = #{p_Name}, P_CNTNT = #{p_Cntnt}, ST_DT = #{st_Dt}, ED_DT = #{ed_Dt}, UPDT_DT = now()"
+			+ " SET P_NAME = #{p_Name}, P_CNTNT = #{p_Cntnt}, ST_DT = #{st_Dt}, ED_DT = #{ed_Dt}, P_MM = CONVERT(#{p_Mm}, UNSIGNED), UPDT_DT = CURDATE()"
 			+ " WHERE P_ID = #{p_Id}")
 	int updateProject(ProjectVo projectVo);
 	
@@ -37,7 +37,7 @@ public interface MainDao {
 	int deleteProject(String p_Id);
 	
 	// MileStone
-	@Select("SELECT MS_ID, MS_DT, P_ID, T_ID, MS_CNTNT, RGST_DT, UPDT_DT FROM teamA.MILESTONE")
+	@Select("SELECT MS_ID, MS_DT, P_ID, T_ID, MS_CNTNT, RGST_DT, UPDT_DT FROM teamA.MILESTONE ORDER BY T_ID, P_ID, MS_ID")
 	List<MilestoneVo> selectMilestone();
 	
 	@Insert("INSERT INTO teamA.MILESTONE(MS_ID, MS_DT, P_ID, T_ID, MS_CNTNT, RGST_DT)"
@@ -51,4 +51,13 @@ public interface MainDao {
 	
 	@Delete("DELETE FROM teamA.MILESTONE WHERE MS_ID = #{ms_Id}")
 	int deleteMilestone(String ms_Id);
+	
+	// History
+	@Select("SELECT HIS_ID, HIS_CNTNT, P_ID, T_ID, EMP_NAME, RGST_DT FROM teamA.HISTORY ORDER BY HIS_ID")
+	List<HistoryVo> selectHistory();
+	
+	@Insert("INSERT INTO teamA.HISTORY(HIS_ID, HIS_CNTNT, P_ID, T_ID, EMP_NAME, RGST_DT)"
+			+ " SELECT SELECT CASE WHEN MAX(CONVERT(HIS_ID, UNSIGNED)) IS NOT NULL THEN MAX(CONVERT(HIS_ID, UNSIGNED)) + 1 ELSE CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s'), '00') END AS HIS_ID "
+			+ ", #{his_Cntnt}, #{p_Id}, #{t_Id}, #{emp_Name}, CURDATE() FROM teamA.HISTORY")
+	int insertHistory(HistoryVo historyVo);
 }
