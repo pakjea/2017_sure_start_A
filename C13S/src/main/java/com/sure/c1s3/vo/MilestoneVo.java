@@ -1,12 +1,16 @@
 package com.sure.c1s3.vo;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class MilestoneVo {
 	private String p_Id;
 	private String t_Id;
 	private String ms_Id;
 	private String ms_Cntnt;
-	private String rgst_DT;
-	private String updt_DT;
+	private String ms_Dt;
+	private String rgst_Dt;
+	private String updt_Dt;
 	
 	public String getP_Id() {
 		return p_Id;
@@ -32,16 +36,27 @@ public class MilestoneVo {
 	public void setMs_Cntnt(String ms_Cntnt) {
 		this.ms_Cntnt = ms_Cntnt;
 	}
-	public String getRgst_DT() {
-		return rgst_DT;
+	public String getMs_Dt() {
+		return ms_Dt;
 	}
-	public void setRgst_DT(String rgst_DT) {
-		this.rgst_DT = rgst_DT;
+	public void setMs_Dt(String ms_Dt) {
+		this.ms_Dt = ms_Dt;
 	}
-	public String getUpdt_DT() {
-		return updt_DT;
+	public String getRgst_Dt() {
+		return rgst_Dt;
 	}
-	public void setUpdt_DT(String updt_DT) {
-		this.updt_DT = updt_DT;
+	public void setRgst_Dt(String rgst_Dt) {
+		this.rgst_Dt = rgst_Dt;
+	}
+	public String getUpdt_Dt() {
+		return updt_Dt;
+	}
+	public void setUpdt_Dt(String updt_Dt) {
+		this.updt_Dt = updt_Dt;
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 }

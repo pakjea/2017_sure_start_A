@@ -1,15 +1,18 @@
 package com.sure.c1s3.vo;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class ProjectVo {
 	private String t_Id;
 	private String p_Id;
 	private String p_Name;
 	private String p_Cntnt;
 	private String p_Mm;
-	private String st_DT;
-	private String ed_DT;
-	private String rgst_DT;
-	private String updt_DT;
+	private String st_Dt;
+	private String ed_Dt;
+	private String rgst_Dt;
+	private String updt_Dt;
 	
 	public String getT_Id() {
 		return t_Id;
@@ -41,28 +44,33 @@ public class ProjectVo {
 	public void setP_Mm(String p_Mm) {
 		this.p_Mm = p_Mm;
 	}
-	public String getSt_DT() {
-		return st_DT;
+	public String getSt_Dt() {
+		return st_Dt;
 	}
-	public void setSt_DT(String st_DT) {
-		this.st_DT = st_DT;
+	public void setSt_Dt(String st_Dt) {
+		this.st_Dt = st_Dt;
 	}
-	public String getEd_DT() {
-		return ed_DT;
+	public String getEd_Dt() {
+		return ed_Dt;
 	}
-	public void setEd_DT(String ed_DT) {
-		this.ed_DT = ed_DT;
+	public void setEd_Dt(String ed_Dt) {
+		this.ed_Dt = ed_Dt;
 	}
-	public String getRgst_DT() {
-		return rgst_DT;
+	public String getRgst_Dt() {
+		return rgst_Dt;
 	}
-	public void setRgst_DT(String rgst_DT) {
-		this.rgst_DT = rgst_DT;
+	public void setRgst_Dt(String rgst_Dt) {
+		this.rgst_Dt = rgst_Dt;
 	}
-	public String getUpdt_DT() {
-		return updt_DT;
+	public String getUpdt_Dt() {
+		return updt_Dt;
 	}
-	public void setUpdt_DT(String updt_DT) {
-		this.updt_DT = updt_DT;
+	public void setUpdt_Dt(String updt_Dt) {
+		this.updt_Dt = updt_Dt;
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 }
