@@ -108,39 +108,19 @@ $(document).ready(function() {
  	
  	/* ############## 타임라인 그래프  ################ */
 
-	csGroup=["cs1","cs2"]; //cs프로젝트
-	qsGroup=["qs1","qs2"]; 
-	carGroup=["car1","car2"];
-	seGroup=["se1","se2"];
-	
-	
+	var dataGroup = ${projectGroup};
+	   console.log(dataGroup);
+	var dataItem = ${projectList};
+	   console.log(dataItem);
+	   
 	// timeline을 넣을 곳,
 	var container = document.getElementById('visualization');
 	
 	//group 생성, 일부러 nested 그룹도 생성    
-	var groups = new vis.DataSet([
-	     {id: "cs", content: 'CS',nestedGroups:csGroup },
-	     {id: "cs1", content: "프로젝트  CS1"},
-	     {id: "cs2", content: "프로젝트  CS2"},
-	     
-	     {id: "qs", content: 'QS',nestedGroups:qsGroup },
-	     {id: "qs1", content: "프로젝트 CS1"},
-	     {id: "qs2", content: "프로젝트 QS2"},
-	     
-	     {id: "carS", content: '차량솔루션센터',nestedGroups:carGroup },
-	     {id: "car1", content: "프로젝트 CAR1"},
-	     {id: "car2", content: "프로젝트 CAR2"},
-	     
-	     {id: "se", content: 'SE',nestedGroups:seGroup },
-	     {id: "se1", content: "프로젝트 SE1"},
-	     {id: "se2", content: "프로젝트 SE2"},
-	]);
+	var groups = new vis.DataSet(dataGroup);
 	
-	// 각 그룹에 표시할 데이타 생성 및 연결
-	var items = new vis.DataSet([
-	   {id: 1, content: "계획", start: '2017-03-01', end: '2017-03-30', type: "background" ,group: "cs1"},
-	   {id: 2, content: "", start: '2017-03-08', type:"point" , group: "cs1",title:"Hello"}
-	]);
+	//각 그룹에 표시할 데이타 생성 및 연결
+	var items = new vis.DataSet(dataItem);
 	
 	// 타임라인 옵션
 	var options = {
@@ -151,9 +131,9 @@ $(document).ready(function() {
 	     tooltip:{
 	        followMouse:true,
 	     },
-	     verticalScroll: true,
-	     min:'2017-01-01',  /*타임라인 시작 지정*/
-	     max:'2017-12-31',  /*타임라인 끝 지정*/
+ 	     verticalScroll: true,
+ 	     min:'2017-01-01',  /*타임라인 시작 지정*/
+ 	     max:'2017-12-31',  /*타임라인 끝 지정*/
 	     maxHeight: 600     /*타임라인 높이 지정, 넘으면 세로 스크롤*/
 	};
 	
@@ -161,7 +141,7 @@ $(document).ready(function() {
 	var timeline = new vis.Timeline(container, items, groups, options);
 	timeline.fit();
 	
-	/* ############## 타임라인 그래프  ################ */
+	
 
 });
 </script>
