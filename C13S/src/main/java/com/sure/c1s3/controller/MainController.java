@@ -1,5 +1,6 @@
 package com.sure.c1s3.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sure.c1s3.service.MainService;
+import com.sure.c1s3.vo.MilestoneVo;
 import com.sure.c1s3.vo.ProjectVo;
 import com.sure.c1s3.vo.TeamVo;
 
@@ -36,22 +38,23 @@ public class MainController {
 		model.addAttribute("teamList", teamList);
 		
 		List<ProjectVo> projectList = mainService.selectProjectList();
-		JSONArray jsonArr = getProjectInformation(projectList);
-		model.addAttribute("projectList", jsonArr);
-		
-		JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
-		model.addAttribute("projectGroup", jsonArrGroup);
+      	List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
+      	JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
+      	model.addAttribute("projectList", jsonArr);
+      
+      	JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
+      	model.addAttribute("projectGroup", jsonArrGroup);
 		
 		return "roadmapMain";
 
    }
    
-  
    /**
     * 프로젝트 등록
+ * @throws JSONException 
     */
    @RequestMapping(value="/registProject",method=RequestMethod.POST)
-   public ModelAndView registProject(ProjectVo projectVo) {
+   public ModelAndView registProject(ProjectVo projectVo) throws JSONException {
       
       int result = mainService.insertProject(projectVo);
       ModelAndView mav = new ModelAndView("roadmapMain");
@@ -60,51 +63,74 @@ public class MainController {
       List<TeamVo> teamList = mainService.selectTeamList();
       mav.addObject("teamList", teamList);
       
-      System.out.println(result);
-      System.out.println(projectVo.toString());
+      List<ProjectVo> projectList = mainService.selectProjectList();
+      List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
+      JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
+      mav.addObject("projectList", jsonArr);
+
+	  JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
+	  mav.addObject("projectGroup", jsonArrGroup);
       
       return mav;   
    }
-   
   
    public JSONArray getProjectGroup(List<TeamVo> teamList, List<ProjectVo> projectList) throws JSONException {
 		JSONArray jsonArr = new JSONArray();
-		String 	  teamId;
-		
-		for (TeamVo teamVo : teamList) {
-			teamId = teamVo.getT_Id();
-			
-			JSONObject jsonTeamObj = new JSONObject();
-			jsonTeamObj.put("id", teamId);
-			jsonTeamObj.put("content", teamVo.getT_Name());
-			jsonTeamObj.put("nestedGroups", teamVo.getT_Name());
-			jsonArr.put(jsonTeamObj);
-			
-			for (ProjectVo vo : projectList) {
-				if (teamId.equals(vo.getT_Id())) {
-					JSONObject jsonObj = new JSONObject();
-					jsonObj.put("id", vo.getP_Id());
-					jsonObj.put("content", vo.getP_Name());
-					jsonArr.put(jsonObj);
-				}
-			}
+	    String      teamId;
+	    //팀 id, 팀 이름, 그룹이름,
+	    for (TeamVo teamVo : teamList) {
+	  		teamId = teamVo.getT_Id();
+	         
+	        JSONObject jsonTeamObj = new JSONObject();
+	         
+	        jsonTeamObj.put("id", teamId);
+	        jsonTeamObj.put("content", teamVo.getT_Name());
+	        jsonArr.put(jsonTeamObj);
+	         
+	        List<String> nest = new ArrayList<String>();
+	         
+	        for (ProjectVo vo : projectList) {
+	            if (teamId.equals(vo.getT_Id())) {
+	            	nest.add(vo.getP_Id());
+	            	JSONObject jsonObj = new JSONObject();
+	            	jsonObj.put("id", vo.getP_Id() );
+	            	jsonObj.put("content", vo.getP_Name());
+	            	jsonArr.put(jsonObj);
+	           	}
+	        }
+	         
+	        jsonTeamObj.put("nestedGroups", nest);
+	         
 		}
 		return jsonArr;
 	}
 
-   
-   public JSONArray getProjectInformation(List<ProjectVo> projectList) throws JSONException {
-      JSONArray arr = new JSONArray(); 
-      
-      for(ProjectVo vo : projectList) {
-         
-         JSONObject obj = new JSONObject(); 
-         obj.put( "id"      , vo.getP_Id()); 
-         obj.put( "content" , vo.getP_Name());
-         
-         arr.put(obj);
-      }
-      return arr;
+   public JSONArray getProjectInformation(List<TeamVo> teamList, List<ProjectVo> projectList, List<MilestoneVo> milestone) throws JSONException {
+		JSONArray jsonArr = new JSONArray(); 
+	         
+	  	for (ProjectVo vo : projectList) {
+	    	JSONObject jsonObj = new JSONObject();
+	      	jsonObj.put("group",vo.getP_Id());
+	      	jsonObj.put("start", vo.getSt_Dt());
+	    	jsonObj.put("end", vo.getEd_Dt());
+	    	jsonObj.put("type", "background");
+	   		jsonObj.put("id", vo.getP_Id());
+	    	jsonObj.put("content", vo.getP_Name());
+	       	jsonArr.put(jsonObj);          	
+	  	}
+	        
+	  	for (MilestoneVo vo : milestone) {
+	        JSONObject jsonObj = new JSONObject();
+	        jsonObj.put("group",vo.getP_Id());
+	        //jsonObj.put("start", vo.getSt_Dt());//마일스톤 날짜
+	        jsonObj.put("type", "point");
+	        jsonObj.put("id", "m"+vo.getP_Id());
+	        jsonObj.put("content","");
+	        jsonObj.put("titlet", vo.getMs_Cntnt());
+	        jsonArr.put(jsonObj);
+	            
+		}
+		return jsonArr;
    }
    
    /**
