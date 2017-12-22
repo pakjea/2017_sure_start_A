@@ -16,8 +16,10 @@
  
  <script src="/js/slick.core.js"></script>
  <script src="/js/slick.grid.js"></script>
+ <script src="/js/slick.dataview.js"></script>
  
  <script>
+  var dataView = new Slick.Data.DataView();
   var grid;
   var columns = [
     {id: "ms_Dt", name: "일자", field: "ms_Dt"},
@@ -29,19 +31,50 @@
     enableColumnReorder: false,
     forceFitColumns: true
   }
+  
+  //Make the grid respond to DataView change events.
+  dataView.onRowCountChanged.subscribe(function (e, args) {
+    grid.updateRowCount();
+    grid.render();
+  });
+
+  dataView.onRowsChanged.subscribe(function (e, args) {
+    grid.invalidateRows(args.rows);
+    grid.render();
+  });
+  
   $(function () {
-    var data = [];
-    for (var i = 0; i < 100; i++) {
-      data[i] = {
-    		  ms_Dt: "일자 " + i,
-    		  ms_Cntnt: "마일스톤 내용" + i,
-    		  writer: "작성자" + i
-      };
-    }
-    grid = new Slick.Grid("#myGrid", data, columns, options);
+//     var data = [];
+//     for (var i = 0; i < 100; i++) {
+//       data[i] = {
+//     		  ms_Dt: "일자 " + i,
+//     		  ms_Cntnt: "마일스톤 내용" + i,
+//     		  writer: "작성자" + i
+//       };
+//     }
+    grid = new Slick.Grid("#myGrid", dataView, columns, options);
     
     //grid.invalidate();
-  })
+    
+  });
+  
+  function getMilestones(){
+	  alert("마일스톤 조회");
+	  var project = { p_Id: "123", testTags: [{id: "1111", tag: "2222"}] }; 
+
+	  $.ajax({ 
+		  type: "POST", 
+		  url: "/getMilestones", 
+		  contentType: "application/json", 
+		  dataType : 'json',
+		  data: JSON.stringify(project), 
+		  success: function(data) { 
+			  console.log(data); 
+			  // This will fire the change events and update the grid.
+			  dataView.setItems(data, "ms_Id");
+		  } 
+	  });
+  }
  </script>
 </head>
 <body>

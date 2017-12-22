@@ -89,7 +89,8 @@ $(document).ready(function() {
  	});
  	
  	$("#registMilestoneBtn").on("click", function() {
- 		$('#milestoneModal').modal('show');
+//  		$('#milestoneModal').modal('show');
+ 		getMilestones();
  	});
  	
  	$("#deleteMilestoneBtn").on("click", function() {
