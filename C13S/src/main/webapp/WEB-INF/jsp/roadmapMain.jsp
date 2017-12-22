@@ -86,7 +86,6 @@ $(document).ready(function() {
 	
 	/* ############## 버튼 이벤트  ################ */
 	$("#registProjectBtn").on("click", function() {
- 		$('#registProjectModal').modal('show');
  	});
  	
  	$("#modifyProjectBtn").on("click", function() {
@@ -102,16 +101,18 @@ $(document).ready(function() {
  				fnSetInfo(myInfoObj);
  			}
  		});
- 		$('#modifyProjectModal').modal('show');
  	});
  	
  	$("#deleteProjectBtn").on("click", function() {
  		alert("프로젝트 삭제");
+ 		var selectedProjectId = "test"; // 사용자가 선택한 프로젝트의 아이디
+ 		var $form = $("#form_delPgt");
+ 		$form.find("#delPjt_pId").val(selectedProjectId);
+ 		$("#form_delPgt").submit();
  	});
  	
  	$("#registMilestoneBtn").on("click", function() {
-//  		$('#milestoneModal').modal('show');
- 		getMilestones();
+ 		getMilestones(); // mileStone.jsp
  	});
  	
  	$("#deleteMilestoneBtn").on("click", function() {
@@ -166,8 +167,6 @@ $(document).ready(function() {
 	// 타임라인 생성/ 화면에 보임
 	var timeline = new vis.Timeline(container, items, groups, options);
 	timeline.fit();
-	
-	
 
 });
 </script>
@@ -232,6 +231,8 @@ $(document).ready(function() {
 					</div>
 				</div>
 			</div><!-- .modal 마일스톤 등록, 수정 -->
+			
+			<jsp:include page="deleteProject.jsp" />
 			
 		</div><!-- .right -->
 	  </div><!-- .row -->
