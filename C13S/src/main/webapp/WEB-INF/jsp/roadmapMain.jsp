@@ -131,6 +131,9 @@ $(document).ready(function() {
 	container.onclick = function (event) {
         var props = timeline.getEventProperties(event);
         selProjectId = props.group;
+        
+        $("div.vis-item.vis-background").css("background", "#bfbfbf");
+        $("div.vis-item.vis-background."+selProjectId).css("background", "red");
 	}
 	
 	/* ############## 버튼 이벤트  ################ */

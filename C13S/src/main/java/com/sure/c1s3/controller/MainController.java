@@ -21,7 +21,6 @@ import com.sure.c1s3.vo.TeamVo;
 @Controller
 public class MainController {
    
-   
    @Autowired
    private MainService mainService;
    
@@ -30,30 +29,20 @@ public class MainController {
     * @throws JSONException 
     */
    @RequestMapping("/")
-   public String roadmapMain(Model model) throws JSONException {
+   public ModelAndView roadmapMain(Model model) throws JSONException {
       
+	    ModelAndView mav = new ModelAndView("roadmapMain");
 	    model.addAttribute("result", -1);
+	      
+	    loadData(mav);
 	   
-		List<TeamVo> teamList = mainService.selectTeamList();
-		model.addAttribute("teamList", teamList);
-		
-		List<ProjectVo> projectList = mainService.selectProjectList();
-		model.addAttribute("projectAllList", projectList);
-		
-      	List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
-      	JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
-      	model.addAttribute("projectList", jsonArr);
-      
-      	JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
-      	model.addAttribute("projectGroup", jsonArrGroup);
-		
-		return "roadmapMain";
+		return mav;
 
    }
    
    /**
     * 프로젝트 등록
- * @throws JSONException 
+    * @throws JSONException 
     */
    @RequestMapping(value="/registProject",method=RequestMethod.POST)
    public ModelAndView registProject(ProjectVo projectVo) throws JSONException {
@@ -62,22 +51,42 @@ public class MainController {
       ModelAndView mav = new ModelAndView("roadmapMain");
       mav.addObject("result", result);
       
-      List<TeamVo> teamList = mainService.selectTeamList();
-      mav.addObject("teamList", teamList);
-      
-      List<ProjectVo> projectList = mainService.selectProjectList();
-      mav.addObject("projectAllList", projectList);
-      
-      List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
-      JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
-      mav.addObject("projectList", jsonArr);
-
-	  JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
-	  mav.addObject("projectGroup", jsonArrGroup);
+      loadData(mav);
       
       return mav;   
    }
-  
+   /**
+    * 프로젝트 변경
+    * @throws JSONException 
+    */
+   @RequestMapping(value="/modifyProject",method=RequestMethod.POST)
+   public ModelAndView modifyProject(ProjectVo projectVo) throws JSONException {
+      
+      int result = mainService.updateProject(projectVo);
+      ModelAndView mav = new ModelAndView("roadmapMain");
+      mav.addObject("result", result);
+      
+      loadData(mav);
+      
+      return mav;   
+   }
+   
+   /**
+    * 프로젝트 삭제
+    * @throws JSONException 
+    */
+   @RequestMapping(value="/deleteProject",method=RequestMethod.POST)
+   public ModelAndView deleteProject(ProjectVo projectVo) throws JSONException {
+	   
+      int result = mainService.deleteProject(projectVo.getP_Id());
+      ModelAndView mav = new ModelAndView("roadmapMain");
+      mav.addObject("result", result);
+      
+      loadData(mav);
+   
+      return mav;   
+   }
+   
    public JSONArray getProjectGroup(List<TeamVo> teamList, List<ProjectVo> projectList) throws JSONException {
 		JSONArray jsonArr = new JSONArray();
 	    String      teamId;
@@ -139,57 +148,23 @@ public class MainController {
 		return jsonArr;
    }
    
-   /**
-    * 프로젝트 변경
- * @throws JSONException 
-    */
-   @RequestMapping(value="/modifyProject",method=RequestMethod.POST)
-   public ModelAndView modifyProject(ProjectVo projectVo) throws JSONException {
-      
-      int result = mainService.updateProject(projectVo);
-      ModelAndView mav = new ModelAndView("roadmapMain");
-      mav.addObject("result", result);
-      
-      List<TeamVo> teamList = mainService.selectTeamList();
-      mav.addObject("teamList", teamList);
-      
-      List<ProjectVo> projectList = mainService.selectProjectList();
-      mav.addObject("projectAllList", projectList);
-      
-      List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
-      JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
-      mav.addObject("projectList", jsonArr);
-
-	  JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
-	  mav.addObject("projectGroup", jsonArrGroup);
-      
-      return mav;   
-   }
-   
-   /**
-    * 프로젝트 삭제
- * @throws JSONException 
-    */
-   @RequestMapping(value="/deleteProject",method=RequestMethod.POST)
-   public ModelAndView deleteProject(ProjectVo projectVo) throws JSONException {
+   // 공통 작업
+   public ModelAndView loadData(ModelAndView mav) throws JSONException{
 	   
-      int result = mainService.deleteProject(projectVo.getP_Id());
-      ModelAndView mav = new ModelAndView("roadmapMain");
-      mav.addObject("result", result);
+	   List<TeamVo> teamList = mainService.selectTeamList();
+	   mav.addObject("teamList", teamList);
       
-      List<TeamVo> teamList = mainService.selectTeamList();
-      mav.addObject("teamList", teamList);
+	   List<ProjectVo> projectList = mainService.selectProjectList();
+	   mav.addObject("projectAllList", projectList);
       
-      List<ProjectVo> projectList = mainService.selectProjectList();
-      mav.addObject("projectAllList", projectList);
-      
-      List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
-      JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
-      mav.addObject("projectList", jsonArr);
+	   List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
+	   JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
+	   mav.addObject("projectList", jsonArr);
 
-	  JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
-	  mav.addObject("projectGroup", jsonArrGroup);
-      return mav;   
+	   JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
+	   mav.addObject("projectGroup", jsonArrGroup);
+	   
+	   return mav;   
    }
    
    /**
