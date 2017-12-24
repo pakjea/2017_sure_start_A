@@ -155,7 +155,17 @@ $(document).ready(function() {
  	});
  	
  	$("#deleteProjectBtn").on("click", function() {
- 		alert("프로젝트 삭제");
+ 		$.each(projectList,function(key,value) {
+ 			if (value.p_Id == selProjectId) {
+	 			$('#d_projectName').val(value.p_Name);
+	 			$('#d_projectContent').val(value.p_Cntnt);
+	 			$('#d_p_Id').val(value.p_Id);
+	 			
+	 			return false;
+ 			}
+		});
+ 		$("#d_projectName").attr("disabled","disabled");
+ 		$("#d_projectContent").attr("disabled","disabled");
  	});
  	
  	$("#registMilestoneBtn").on("click", function() {
@@ -193,7 +203,7 @@ $(document).ready(function() {
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-primary" id="registProjectBtn" data-toggle="modal" data-target="#registProjectModal" data-whatever="">프로젝트 등록</button>
 				<button type="button" class="btn btn-default" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
-				<button type="button" class="btn btn-default" id="deleteProjectBtn">프로젝트 삭제</button>
+				<button type="button" class="btn btn-default" id="deleteProjectBtn" data-toggle="modal" data-target="#deleteProjectModal" data-whatever="">프로젝트 삭제</button>
 			</div>
 			
 			<div class="btn-group" role="group">
@@ -224,6 +234,16 @@ $(document).ready(function() {
 					</div>
 				</div>
 			</div><!-- .modal 프로젝트 수정 -->
+			
+			<div class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+			    	<div class="modal-content">
+			     		<div class="modal-body">
+							<jsp:include page="deleteProject.jsp" />
+						</div>
+					</div>
+				</div>
+			</div><!-- .modal 프로젝트 삭제 -->
 			
 			<div class="modal fade" id="milestoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" role="document">

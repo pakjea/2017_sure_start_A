@@ -171,9 +171,9 @@ public class MainController {
  * @throws JSONException 
     */
    @RequestMapping(value="/deleteProject",method=RequestMethod.POST)
-   public ModelAndView deleteProject(String p_Id) throws JSONException {
+   public ModelAndView deleteProject(ProjectVo projectVo) throws JSONException {
 	   
-      int result = mainService.deleteProject(p_Id);
+      int result = mainService.deleteProject(projectVo.getP_Id());
       ModelAndView mav = new ModelAndView("roadmapMain");
       mav.addObject("result", result);
       
