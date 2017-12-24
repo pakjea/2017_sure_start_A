@@ -139,7 +139,7 @@ public class MainController {
 	        jsonObj.put("group"		, vo.getP_Id());
 	        jsonObj.put("start"		, vo.getMs_Dt());//마일스톤 날짜
 	        jsonObj.put("type"		, "point");
-	        jsonObj.put("id"		, "m"+vo.getP_Id());
+	        jsonObj.put("id"		, "m"+vo.getMs_Id());
 	        jsonObj.put("content"	,"");
 	        jsonObj.put("titlet"	, vo.getMs_Cntnt());
 	        jsonArr.put(jsonObj);
@@ -157,8 +157,8 @@ public class MainController {
 	   List<ProjectVo> projectList = mainService.selectProjectList();
 	   mav.addObject("projectAllList", projectList);
       
-	   List<MilestoneVo> milestoneList = mainService.selectMilestoneList();
-	   JSONArray jsonArr = getProjectInformation(teamList, projectList,milestoneList);
+	   List<MilestoneVo> milestoneList = mainService.selectAllMilestoneList();
+	   JSONArray jsonArr = getProjectInformation(teamList, projectList, milestoneList);
 	   mav.addObject("projectList", jsonArr);
 
 	   JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);

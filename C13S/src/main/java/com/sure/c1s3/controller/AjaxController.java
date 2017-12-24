@@ -1,6 +1,6 @@
 package com.sure.c1s3.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sure.c1s3.service.MainService;
 import com.sure.c1s3.vo.MilestoneVo;
-import com.sure.c1s3.vo.ProjectVo;
 
 @RestController
 public class AjaxController {
@@ -22,19 +21,48 @@ public class AjaxController {
 	 * 마일스톤 조회
 	 */
 	@RequestMapping(value="/getMilestones", method=RequestMethod.POST)
-	public ArrayList<MilestoneVo> getMilestones(@RequestBody ProjectVo project){		
+	public List<MilestoneVo> getMilestones(@RequestBody String p_Id){
+		List<MilestoneVo> milestoneList = mainService.selectMilestoneList(p_Id);
+		return milestoneList;
+	}
+	
+	/**
+	 * 마일스톤 수정
+	 */
+	@RequestMapping(value="/saveMilestones", method=RequestMethod.POST)
+	public int saveMilestones(@RequestBody List<MilestoneVo> milestonList){
 		
-		ArrayList<MilestoneVo> data = new ArrayList<MilestoneVo>();
+		List<MilestoneVo> oldList = mainService.selectMilestoneList(milestonList.get(0).getP_Id()); 
+	
+		int  	qCnt 	= 0;
+		boolean bUpdate = false;
+		for(MilestoneVo vo : milestonList) {
+			System.out.println(vo);
+			bUpdate = false;
+			for(MilestoneVo oldVo : oldList) {
+				if(vo.getMs_Id().equals(oldVo.getMs_Id())) {
+					bUpdate = true;
+					break;
+				}
+			}
+			
+			if(bUpdate) {
+				qCnt += mainService.updateMilestone(vo);
+				System.out.println("Update");
+			} else {
+				qCnt += mainService.insertMilestone(vo);
+				System.out.println("Insert");
+			}
+			System.out.println(qCnt);
+		}
 		
-		/*테스트용*/
-		MilestoneVo milestone = new MilestoneVo();
-		milestone.setMs_Id("123123");
-		milestone.setMs_Cntnt("마일스톤 내용내용");
-		data.add(milestone);
-		/*테스트용*/
+		int result;
+		if (milestonList.size() == qCnt) {
+			result = 1;
+		} else {
+			result = 0;
+		}
 		
-		//list = mainService.selectMilestoneList();
-		
-		return data;
+		return result;
 	}
 }

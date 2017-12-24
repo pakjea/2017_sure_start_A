@@ -20,6 +20,20 @@ String contextPath = request.getContextPath();
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
  <script src="http://visjs.org/dist/vis.js"></script>
  <link href="http://visjs.org/dist/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+  
+  <link rel="stylesheet" href="/css/slick.grid.css" type="text/css"/>
+  <link rel="stylesheet" href="/css/jquery-ui-1.8.16.custom.css" type="text/css"/>
+  <link rel="stylesheet" href="/css/example.css" type="text/css"/>
+ 
+  <script src="/js/jquery-1.7.min.js"></script>
+  <script src="/js/jquery.event.drag-2.2.js"></script>
+  <script src="/js/jquery-ui-1.8.16.custom.min.js"></script>
+ 
+  <script src="/js/slick.core.js"></script> 
+  <script src="/js/slick.dataview.js"></script>
+  <script src="/js/slick.formatters.js"></script>
+  <script src="/js/slick.editors.js"></script>
+  <script src="/js/slick.grid.js"></script>
  <style>
 body {
     font-family: "Spoqa Han Sans",Malgun Gothic,"맑은 고딕",Dotum,"돋움",sans-serif;
@@ -172,7 +186,7 @@ $(document).ready(function() {
  	});
  	
  	$("#registMilestoneBtn").on("click", function() {
- 		getMilestones();
+ 		getMilestones(selProjectId);
  	});
  	
  	$("#deleteMilestoneBtn").on("click", function() {
