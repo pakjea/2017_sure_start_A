@@ -38,6 +38,8 @@
 		</div>
 		</div>
 		
+		<p>이 프로젝트를 삭제 하시겠습니까?</p>
+		
 		<!-- TODO: 추후 히든으로 전환 : 프로젝트 아이디 -->
 		p_Id<input type="text" id="d_p_Id" name="p_Id" value="">
 		(TODO: 추후 히든으로 전환)
