@@ -6,9 +6,6 @@
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
  <title>마일스톤</title>
-
-
-
  
  <script>
   var dataView = new Slick.Data.DataView();
@@ -52,19 +49,6 @@
     
     //grid.invalidate();
     
-//     $("#ui-datepicker-div").offset();
-	  $("#ui-datepicker-div").css("z-index", 1000);
-    
-    $("#addMilestoneBtn").on("click", function() {
-    	console.log("add row");
-    	addRow();
-//     	var data = {
-//         };
-//     	dataView.beginUpdate();
-//     	dataView.addItem(data, "ms_Id");
-//     	dataView.endUpdate();
- 	});
-    
     $("#saveMilestoneBtn").on("click", function() {
     	console.log("Save row");
     	var gridData = dataView.getItems();
@@ -84,9 +68,7 @@
  			  	}
  		  	} 
  	  	});
-    	
  	});
-    
   });
   
   function getMilestones(selP_Id){
