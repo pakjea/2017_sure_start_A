@@ -95,6 +95,31 @@ body {
 </style>
 <script>
 
+var dataGroup	 = ${projectGroup};
+var dataItem  	 = ${projectList};
+//group 생성, 일부러 nested 그룹도 생성    
+var groups = new vis.DataSet(dataGroup);
+
+// 각 그룹에 표시할 데이타 생성 및 연결
+var items = new vis.DataSet(dataItem);
+
+//타임라인 옵션
+var options1 = {
+	orientation:{
+		axis:'both',
+		item:'top'
+	},
+	tooltip:{
+		followMouse:true,
+	},
+	groupOrder:function(a,b){
+		return a.id - b.id;
+	},
+	verticalScroll: true,
+	//min:'2017-01-01',  /*타임라인 시작 지정*/
+	//max:'2017-12-31',  /*타임라인 끝 지정*/
+	maxHeight: 600     /*타임라인 높이 지정, 넘으면 세로 스크롤*/
+};
 
 $(document).ready(function() {
 
@@ -110,49 +135,37 @@ $(document).ready(function() {
  	/* ############## 타임라인 그래프  ################ */
 
  	var projectList  = ${projectAllList};
-	var dataGroup	 = ${projectGroup};
-	var dataItem  	 = ${projectList};
 	   
-	// timeline을 넣을 곳,
-	var container = document.getElementById('visualization');
-	
-	//group 생성, 일부러 nested 그룹도 생성    
-	var groups = new vis.DataSet(dataGroup);
-	
-	// 각 그룹에 표시할 데이타 생성 및 연결
-	var items = new vis.DataSet(dataItem);
-	
-	// 타임라인 옵션
-	var options = {
-	     orientation:{
-	        axis:'both',
-	        item:'top'
-	     },
-	     tooltip:{
-	        followMouse:true,
-	     },
- 	     verticalScroll: true,
- 	     min:'2017-01-01',  /*타임라인 시작 지정*/
- 	     max:'2017-12-31',  /*타임라인 끝 지정*/
-	     maxHeight: 600     /*타임라인 높이 지정, 넘으면 세로 스크롤*/
-	};
+// 	timeline을 넣을 곳,
+// 	var container = document.getElementById('visualization');
 	
 	// 타임라인 생성/ 화면에 보임
-	var timeline = new vis.Timeline(container, items, groups, options);
+	var timeline = new vis.Timeline(document.getElementById('visualization'), items, groups, options1);
 	timeline.fit();
 	
 	var selProjectId;
-	container.onclick = function (event) {
+	document.getElementById('visualization').onclick = function (event) {
         var props = timeline.getEventProperties(event);
-        selProjectId = props.group;
+        selProjectId = props.group;        
+        
+        if($("div.vis-label.vis-nesting-group."+selProjectId).hasClass("expanded")==true){
+        	$("#"+selProjectId).attr('checked', true);
+        }else{
+        	$("#"+selProjectId).attr('checked', false);
+        }
+        
         
         $("div.vis-item.vis-background").css("background", "#bfbfbf");
         $("div.vis-item.vis-background."+selProjectId).css("background", "red");
-        
 	}
+	
+// 	$("div.vis-label.vis-nesting-group."+selProjectId+".expanded").on("click",function(){
+// 		console.log();
+// 	});
 	
 	/* ############## 버튼 이벤트  ################ */
 	$("#registProjectBtn").on("click", function() {
+		
  	});
  	
  	$("#modifyProjectBtn").on("click", function() {
@@ -191,6 +204,35 @@ $(document).ready(function() {
  	/* ############## 버튼 이벤트  ################ */
 });
 
+
+function check(box){
+	
+	var nest = groups.get({
+        fields: ['nestedGroups'],
+        filter: function (item) {
+             return item.id == box.value;
+           }
+        })[0];
+	
+	if(box.checked==true){
+		groups.update({id : box.value, showNested : true});//
+		
+		for(var j in nest.nestedGroups){
+			groups.update({id : nest.nestedGroups[j], visible : true});
+			console.log(nest.nestedGroups[j]);
+			
+		}
+	}else{
+		groups.update({id : box.value, showNested : false});//
+		
+		for(var j in nest.nestedGroups){
+			groups.update({id : nest.nestedGroups[j], visible : false});
+			console.log(nest.nestedGroups[j]);
+			
+		}
+	}
+}
+
 </script>
  
 </head>
@@ -201,7 +243,7 @@ $(document).ready(function() {
 			<h1>팀</h1>
 			<div class="form-check">
 				<c:forEach items="${teamList}" var="team">
-			 		<label class="form-check-label" for="teamId"><input class="form-check-input" type="checkbox" value="${team.t_Id}">${team.t_Name}</label><br>
+			 		<label class="form-check-label" for="teamId"><input class="form-check-input" type="checkbox" id="${team.t_Id}" value="${team.t_Id}" onClick="check(this)">${team.t_Name}</label><br>
 				</c:forEach>
 			</div>
 		</div><!-- .left -->

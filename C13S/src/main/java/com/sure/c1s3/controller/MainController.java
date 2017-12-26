@@ -97,7 +97,9 @@ public class MainController {
 	        JSONObject jsonTeamObj = new JSONObject();
 	         
 	        jsonTeamObj.put("id", teamId);
+	      	jsonTeamObj.put("className"	, teamVo.getT_Id());
 	        jsonTeamObj.put("content", teamVo.getT_Name());
+	        jsonTeamObj.put("showNested", false);
 	        jsonArr.put(jsonTeamObj);
 	         
 	        List<String> nest = new ArrayList<String>();
@@ -141,7 +143,7 @@ public class MainController {
 	        jsonObj.put("type"		, "point");
 	        jsonObj.put("id"		, "m"+vo.getMs_Id());
 	        jsonObj.put("content"	,"");
-	        jsonObj.put("titlet"	, vo.getMs_Cntnt());
+	        jsonObj.put("title"	, vo.getMs_Cntnt());
 	        jsonArr.put(jsonObj);
 	            
 		}
