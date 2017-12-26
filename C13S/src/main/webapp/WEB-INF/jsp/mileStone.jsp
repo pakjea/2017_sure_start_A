@@ -32,21 +32,21 @@
  <script src="/js/slick.formatters.js"></script>
  <script src="/js/slick.editors.js"></script>
  <script src="/js/slick.grid.js"></script>
- <script src="/js/slick.dataview.js"></script>
+<!--  <script src="/js/slick.grid_ms.js"></script> -->
  
  <script>
-	var dataView = new Slick.Data.DataView();
-	var grid;
+	var dataView_ms = new Slick.Data.DataView();
+	var grid_ms;
 	var checkboxSelector = new Slick.CheckboxSelectColumn({
 		cssClass: "slick-cell-checkboxsel"
 	});
-	var columns = [
+	var columns_ms = [
 		checkboxSelector.getColumnDefinition(),
 		{id: "ms_Dt", name: "일자", field: "ms_Dt", editor: Slick.Editors.Date},
 		{id: "ms_Cntnt", name: "내용", field: "ms_Cntnt", editor: Slick.Editors.Text},
 		{id: "writer", name: "작성자", field: "writer", editor: Slick.Editors.Text},
 	];
-	var options = {
+	var options_ms = {
 		enableCellNavigation: true,
 		enableColumnReorder: false,
 		forceFitColumns: true,
@@ -54,36 +54,64 @@
 		asyncEditorLoading: false,
 		autoEdit: false
 	}
-
-	//Make the grid respond to DataView change events.
-	dataView.onRowCountChanged.subscribe(function (e, args) {
-		grid.updateRowCount();
-		grid.render();
-	});
 	
-	dataView.onRowsChanged.subscribe(function (e, args) {
-		grid.invalidateRows(args.rows);
-		grid.render();
-	});
-  
 	$(function () {
-		  
+		 
 		// 그리드 생성
-	    grid = new Slick.Grid("#myGrid", dataView, columns, options);
-	    grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
-	    grid.registerPlugin(checkboxSelector);
+	    grid_ms = new Slick.Grid("#myGrid", dataView_ms, columns_ms, options_ms);
+	    grid_ms.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
+	    grid_ms.registerPlugin(checkboxSelector);
 	    
-	    //grid.invalidate();
-    
-	    var msIdCnt = 0;
-	    $("#addMilestoneBtn").on("click", function() {
-	    	
-	    	var milestone = {ms_Id: msIdCnt++, p_Id: "", ms_Cntnt: "", ms_Dt: "", writer: "", flag: "I"};
-	    	
-			dataView.addItem(milestone);
-			dataView.refresh();
+	    //grid_ms.invalidate();
+	    
+	    grid_ms.onClick.subscribe(function (e, args) {
+// 	        var row = args.grid.getData().getItems()[args.row];
+	        var column = args.grid.getColumns()[args.cell];
+	        
+	        // 체크박스
+		    if (column.selectable == true) {
+		    	var array = grid_ms.getSelectedRows();
+		    	var current = args.row;
+		    	var searchedIndex = $.inArray(current, array);
+		    	
+		    	if(searchedIndex >= 0){
+		            array.splice(searchedIndex, 1);
+		    	} else {
+		    		array.push(args.row);
+		    	}
+		    	
+		    	grid_ms.setSelectedRows(array);
+		    	grid_ms.invalidate();
+		    }
 	    });
 	    
+	    //Make the grid respond to DataView change events.
+		dataView_ms.onRowCountChanged.subscribe(function (e, args) {
+			grid_ms.updateRowCount();
+			grid_ms.render();
+		});
+		
+		dataView_ms.onRowsChanged.subscribe(function (e, args) {
+			grid_ms.invalidateRows(args.rows);
+			grid_ms.render();
+		});
+    
+		
+	    // 추가 버튼 클릭
+	    var msIdCnt = 0;
+	    $("#addMilestoneBtn").on("click", function() {
+	    	var milestone = {ms_Id: msIdCnt++, p_Id: "", ms_Cntnt: "", ms_Dt: "", writer: "", flag: "I"};
+	    	
+			dataView_ms.addItem(milestone);
+			dataView_ms.refresh();
+			
+			var array = grid_ms.getSelectedRows();
+	    	array.push(dataView_ms.getLength()-1);
+	    	grid_ms.setSelectedRows(array);
+	    	grid_ms.invalidate();
+	    });
+	    
+	    // 삭제 버튼 클릭
 		$("#delMilestoneBtn").on("click", function() {
 			if(!confirm("삭제하시겠습니까?")) return;
 			
@@ -91,14 +119,14 @@
 			var ids = [];
 			var selectedIndexes = [];
 
-			selectedIndexes = grid.getSelectedRows();
+			selectedIndexes = grid_ms.getSelectedRows();
 			
 			if(selectedIndexes.length == 0) {
 				alert("삭제할 마일스톤을 선택해 주세요.");
 			}
 			
 			$.each(selectedIndexes, function (index, value) {
-				var item = grid.getDataItem(value);
+				var item = grid_ms.getDataItem(value);
 				
 				if(item.flag == "I") {
 					ids.push(item.ms_Id);
@@ -109,7 +137,7 @@
 			});
 			
 			$.each(ids, function(index, value) {
-				dataView.deleteItem(value);
+				dataView_ms.deleteItem(value);
 			});
 			
 			if(milestones.length > 0) {
@@ -118,9 +146,10 @@
 			
 	    });
 	    
+	    // 저장 버튼 클릭
 	    $("#saveMilestoneBtn").on("click", function() {
     		console.log("Save row");
-    		var gridData = dataView.getItems();
+    		var gridData = dataView_ms.getItems();
     		console.log(gridData);
     	
     		$.ajax({ 
@@ -151,7 +180,7 @@
 			data: selP_Id, 
 			success: function(data) { 
 				// This will fire the change events and update the grid.
-				dataView.setItems(data, "ms_Id");
+				dataView_ms.setItems(data, "ms_Id");
 			} 
 		});
 	}
