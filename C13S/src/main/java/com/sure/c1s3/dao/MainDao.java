@@ -23,9 +23,12 @@ public interface MainDao {
 	@Select("SELECT P_ID, T_ID, P_NAME, P_CNTNT, ST_DT, ED_DT, P_MM, RGST_DT, UPDT_DT FROM teamA.PROJECT ORDER BY T_ID, P_ID")
 	List<ProjectVo> selectProject();
 	
+	@Select("SELECT LPAD(MAX(CONVERT(P_ID, UNSIGNED)) + 1, 8, '0') FROM teamA.PROJECT")
+	String selectProjectMaxId();
+	
 	@Insert("INSERT INTO teamA.PROJECT(P_ID, T_ID, P_NAME, P_CNTNT, ST_DT, ED_DT, P_MM, RGST_DT)"
-			+ " SELECT LPAD(MAX(CONVERT(P_ID, UNSIGNED)) + 1, 8, '0') AS P_ID, #{t_Id}, #{p_Name}, #{p_Cntnt}, "
-			+ " STR_TO_DATE(#{st_Dt}, '%Y-%m-%d'), STR_TO_DATE(#{ed_Dt}, '%Y-%m-%d'), CONVERT(#{p_Mm}, UNSIGNED), CURDATE() FROM teamA.PROJECT")
+			+ " VALUES (#{p_Id}, #{t_Id}, #{p_Name}, #{p_Cntnt}, "
+			+ " STR_TO_DATE(#{st_Dt}, '%Y-%m-%d'), STR_TO_DATE(#{ed_Dt}, '%Y-%m-%d'), CONVERT(#{p_Mm}, UNSIGNED), CURDATE())")
 	int insertProject(ProjectVo projectVo);
 	
 	@Update("UPDATE teamA.PROJECT "
@@ -43,9 +46,11 @@ public interface MainDao {
 	@Select("SELECT MS_ID, MS_DT, P_ID, T_ID, MS_CNTNT, WRITER, RGST_DT, UPDT_DT FROM teamA.MILESTONE WHERE P_ID = #{p_Id} ORDER BY T_ID, P_ID, MS_ID")
 	List<MilestoneVo> selectMilestone(String p_Id);
 	
+	@Select("SELECT LPAD(MAX(CONVERT(MS_ID, UNSIGNED)) + 1, 8, '0') FROM teamA.MILESTONE")
+	String selectMilestoneMaxId();
+	
 	@Insert("INSERT INTO teamA.MILESTONE(MS_ID, MS_DT, P_ID, T_ID, MS_CNTNT, WRITER, RGST_DT)"
-			+ " SELECT LPAD(MAX(CONVERT(MS_ID, UNSIGNED)) + 1, 8, '0') AS MS_ID, "
-			+ " STR_TO_DATE(#{ms_Dt}, '%Y-%m-%d'), #{p_Id}, #{t_Id}, #{ms_Cntnt}, #{writer}, CURDATE() FROM teamA.MILESTONE")
+			+ " VALUES (#{ms_Id}, STR_TO_DATE(#{ms_Dt}, '%Y-%m-%d'), #{p_Id}, #{t_Id}, #{ms_Cntnt}, #{writer}, CURDATE() )")
 	int insertMilestone(MilestoneVo milestoneVo);
 	
 //	@Update("INSERT INTO teamA.MILESTONE(MS_ID, MS_DT, P_ID, T_ID, MS_CNTNT, WRITER, RGST_DT)"
@@ -61,12 +66,17 @@ public interface MainDao {
 	@Delete("DELETE FROM teamA.MILESTONE WHERE MS_ID = #{ms_Id}")
 	int deleteMilestone(String ms_Id);
 	
+	@Delete("DELETE FROM teamA.MILESTONE WHERE P_ID = #{p_Id}")
+	int deleteAllMilestone(String p_Id);
+	
 	// History
-	@Select("SELECT HIS_ID, HIS_CNTNT, P_ID, T_ID, EMP_NAME, RGST_DT FROM teamA.HISTORY ORDER BY HIS_ID")
-	List<HistoryVo> selectHistory();
+	@Select("SELECT HIS_ID, HIS_CNTNT, P_ID, T_ID, EMP_NAME, RGST_DT FROM teamA.HISTORY WHERE 1=1"
+			+ " <if test=\"searchSt_Dt != null\"> RGST_DT BETWEEN #{searchSt_Dt} AND #{searchEd_Dt}</if>"
+			+ " <if test=\"t_Id != null\"> T_ID = #{t_Id}</if>"
+			+ " ORDER BY HIS_ID")
+	List<HistoryVo> selectHistory(HistoryVo historyVo);
 	
 	@Insert("INSERT INTO teamA.HISTORY(HIS_ID, HIS_CNTNT, P_ID, T_ID, EMP_NAME, RGST_DT)"
-			+ " SELECT SELECT CASE WHEN MAX(CONVERT(HIS_ID, UNSIGNED)) IS NOT NULL THEN MAX(CONVERT(HIS_ID, UNSIGNED)) + 1 ELSE CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s'), '00') END AS HIS_ID "
-			+ ", #{his_Cntnt}, #{p_Id}, #{t_Id}, #{emp_Name}, CURDATE() FROM teamA.HISTORY")
+			+ " VALUES (#{his_Id}, #{his_Cntnt}, #{p_Id}, #{t_Id}, #{emp_Name}, CURDATE())")
 	int insertHistory(HistoryVo historyVo);
 }

@@ -126,13 +126,7 @@
 			
 			$.each(selectedIndexes, function (index, value) {
 				var item = grid_ms.getDataItem(value);
-				
-				if(item.flag == "I") {
-					ids.push(item.ms_Id);
-				} else {
-					milestones.push(item);
-				}
-				
+				milestones.push(item);
 			});
 			
 			$.each(ids, function(index, value) {
@@ -147,31 +141,35 @@
 	    
 	    // 저장 버튼 클릭
 	    $("#saveMilestoneBtn").on("click", function() {
-    		console.log("Save row");
     		var gridData = dataView_ms.getItems();
-    		console.log(gridData);
-    	
-    		$.ajax({ 
- 		  		type: "POST", 
- 		  		url: rootContextPath + "/saveMilestones", 
- 		  		contentType: "application/json",
- 		  		dataType: "json",
- 		  		data: JSON.stringify(gridData), 
- 		  		success: function(data) { 
- 			  		if (data == 1) {
- 			  			alert("수정되었습니다.");
- 			  			getMilestones(selProjectId);
- 				  	} else {
- 			  			alert("Error");
- 			  		}
- 		  		} 
- 	  		});
+    		
+			if(!confirm("저장하시겠습니까?")) return;
+			
+			var milestones = [];
+			var ids = [];
+			var selectedIndexes = [];
+
+			selectedIndexes = grid.getSelectedRows();
+			
+			if(selectedIndexes.length == 0) {
+				alert("수정할 마일스톤을 선택해 주세요.");
+			}
+			
+			$.each(selectedIndexes, function (index, value) {
+				var item = grid.getDataItem(value);
+				milestones.push(item);	
+			});
+    		
+			if(milestones.length > 0) {
+				saveMilestones(milestones);
+			}
   		});
 	    
 	});
   
-	function getMilestones(selP_Id){
-		
+	function getMilestones(selP_Id, selT_Id){
+		ms_PId = selP_Id;
+		ms_TId = selT_Id;
 		$.ajax({ 
 			type: "POST",
 			url: rootContextPath + "/getMilestones", 
@@ -185,7 +183,6 @@
 	}
 	
 	function deleteMilestones(array){
-		alert("마일스톤 삭제");
 		var milestones = array;
 		
 		$.ajax({ 
@@ -194,8 +191,13 @@
 			contentType: "application/json", 
 			dataType : 'json',
 			data: JSON.stringify(milestones), 
-			success: function(data) { 
-				getMilestones(selProjectId);
+			success: function(data) {
+				if (data == 1) {
+					alert("삭제되었습니다.");
+					getMilestones(ms_PId, ms_TId);
+			  	} else {
+		  			alert("Error");
+		  		}
 			} 
 		});
 	}

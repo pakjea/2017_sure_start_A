@@ -187,14 +187,28 @@ $(document).ready(function() {
  	});
  	
  	$("#deleteProjectBtn").on("click", function() {
- 		var selectedProjectId = selProjectId; // 사용자가 선택한 프로젝트의 아이디
+ 		if(!confirm("삭제하시겠습니까?")) return;
  		var $form = $("#form_delPgt");
- 		$form.find("#delPjt_pId").val(selectedProjectId);
+ 		$.each(projectList,function(key,value) {
+ 			if (value.p_Id == selProjectId) {
+ 				$form.find("#delPjt_pId").val(value.p_Id);
+ 		 		$form.find("#delPjt_pName").val(value.p_Name);	
+ 		 		$form.find("#delPjt_tId").val(value.t_Id);
+ 		 		
+ 		 		return false;
+ 			}
+		});
  		$("#form_delPgt").submit();
  	});
  	
  	$("#registMilestoneBtn").on("click", function() {
- 		getMilestones(selProjectId); // mileStone.jsp
+ 		$.each(projectList,function(key,value) {
+ 			if (value.p_Id == selProjectId) {
+ 				selTeamId = value.t_Id;
+	 			return false;
+ 			}
+		});
+ 		getMilestones(selProjectId, selTeamId);
  	});
  	
  	$("#goHistory").on("click", function() {

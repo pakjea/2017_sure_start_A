@@ -1,6 +1,8 @@
 package com.sure.c1s3.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sure.c1s3.service.MainService;
+import com.sure.c1s3.vo.HistoryVo;
 import com.sure.c1s3.vo.MilestoneVo;
 import com.sure.c1s3.vo.ProjectVo;
 import com.sure.c1s3.vo.TeamVo;
@@ -47,7 +50,14 @@ public class MainController {
    @RequestMapping(value="/registProject",method=RequestMethod.POST)
    public ModelAndView registProject(ProjectVo projectVo) throws JSONException {
       
+      String maxId = mainService.selectProjectMaxId();
+      projectVo.setP_Id(maxId);
+      
       int result = mainService.insertProject(projectVo);
+      if(result == 1) {
+    	  insertProjectHistory(projectVo, "1");
+      }
+      
       ModelAndView mav = new ModelAndView("roadmapMain");
       mav.addObject("result", result);
       
@@ -55,6 +65,7 @@ public class MainController {
       
       return mav;   
    }
+   
    /**
     * 프로젝트 변경
     * @throws JSONException 
@@ -63,6 +74,10 @@ public class MainController {
    public ModelAndView modifyProject(ProjectVo projectVo) throws JSONException {
       
       int result = mainService.updateProject(projectVo);
+      if(result == 1) {
+    	  insertProjectHistory(projectVo, "2");
+      }
+      
       ModelAndView mav = new ModelAndView("roadmapMain");
       mav.addObject("result", result);
       
@@ -79,6 +94,11 @@ public class MainController {
    public ModelAndView deleteProject(ProjectVo projectVo) throws JSONException {
 	   
       int result = mainService.deleteProject(projectVo.getP_Id());
+      if(result == 1) {
+    	  mainService.deleteAllMilestone(projectVo.getP_Id());
+    	  insertProjectHistory(projectVo, "3");
+      }
+      
       ModelAndView mav = new ModelAndView("roadmapMain");
       mav.addObject("result", result);
       
@@ -170,7 +190,7 @@ public class MainController {
    }
    
    /**
-    * 마일스톤 등록, 변경
+    * 로드맵 변경이력 조회
     */
    @RequestMapping("/mileStone")
    public String mileStone(Model model) {
@@ -192,4 +212,26 @@ public class MainController {
 	   return mav;
    }
    
+   /**
+	 * 이력 저장
+	 */
+	public int insertProjectHistory(ProjectVo projectVo, String division){
+		
+		Date nowDate = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+		
+		HistoryVo historyVo = new HistoryVo();
+		if 		  (division.equals("1")) {	// 추가
+			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 추가");
+		} else if (division.equals("2")) {	// 수정
+			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 변경 : " + projectVo.getHis_Cntnt());
+		} else if (division.equals("3")) {	// 삭제
+			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 삭제");
+		}
+		historyVo.setHis_Id(sdf.format(nowDate).toString() + "00");
+		historyVo.setP_Id(projectVo.getP_Id());
+		historyVo.setT_Id(projectVo.getT_Id());
+		
+		return mainService.insertHistory(historyVo);
+	}
 }
