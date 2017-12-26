@@ -1,7 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+<jsp:useBean id="now" class="java.util.Date"/>
+<c:set var="today"><fmt:formatDate pattern="yyyy-MM-dd" value="${now}" /></c:set>
+
 <!DOCTYPE html>
 <html>
 <head>
+<%
+String contextPath = request.getContextPath();
+%>
+<script type="text/javascript">
+    var rootContextPath = "<%=contextPath%>";
+</script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
@@ -62,14 +74,64 @@
 	    grid = new Slick.Grid("#myGrid", dataView, columns, options);
 	    grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
 	    
+	    // 조회 버튼 클릭
+	    $("#searchHistory").on("click", function() {
+	    	var $field = $("#searchHistoryForm").find("input, select");
+	    	var params = new Object();
+	    	
+	    	params["st_Dt"] = $("#startDate").val();
+	    	params["ed_Dt"] = $("#endDate").val();
+	    	params["t_Id"] = $("#teamId").val();
+	    	
+	    	getHistory(params);
+	    });
+	    
 	});
 	
+	function getHistory(params) {
+		
+		$.ajax({ 
+			type: "POST",
+			url: rootContextPath + "/getHistoryList",
+			contentType: "application/json", 
+			dataType : 'json',
+			data: JSON.stringify(params), 
+			success: function(data) { 
+				// This will fire the change events and update the grid.
+				dataView.setItems(data, "his_Id");
+			} 
+		});
+	}
 	
 	</script>
 </head>
 <body>
     <div class="container-fluid">
-    	<div id="myGrid"></div>
+    	<div class="row">
+    		<form class="form-inline" id="searchHistoryForm">
+				<label for="startDate">기간</label>
+				<div class="input-group" style="padding:10px;">
+				  <input type="date" class="form-control" id="startDate" name="st_Dt" value="${today}" required>
+				  <div class="input-group-addon">to</div>
+				  <input type="date" class="form-control" id="endDate" name="ed_Dt" value="${today}" required>
+				</div>
+   			
+				<label for="teamId">부서</label>
+				<div class="input-group" style="padding:10px;">
+					<select id="teamId" name="t_Id" class="custom-select">
+						<c:forEach items="${teamList}" var="team">
+					 		<option label="${team.t_Name}" value="${team.t_Id}"></option>
+						</c:forEach>
+					</select>
+				</div>
+				
+				<button class="btn btn-primary" id="searchHistory">조회</button>
+    		</form>
+    	</div>
+    	
+    	<div class="row">
+    		<div id="myGrid"></div>
+    	</div>
     </div>
 </body>
 </html>

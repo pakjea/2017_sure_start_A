@@ -189,8 +189,8 @@ $(document).ready(function() {
  		location.href = rootContextPath + "/roadmapHistory";
  	});
  	/* ############## 버튼 이벤트  ################ */
- 	
 });
+
 </script>
  
 </head>
@@ -211,13 +211,13 @@ $(document).ready(function() {
 			
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-primary" id="registProjectBtn" data-toggle="modal" data-target="#registProjectModal" data-whatever="">프로젝트 등록</button>
-				<button type="button" class="btn btn-default" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
-				<button type="button" class="btn btn-default" id="deleteProjectBtn" data-toggle="modal" data-target="#deleteProjectModal" data-whatever="">프로젝트 삭제</button>
+				<button type="button" class="btn btn-primary" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
+				<button type="button" class="btn btn-primary" id="deleteProjectBtn" data-toggle="modal" data-target="#deleteProjectModal" data-whatever="">프로젝트 삭제</button>
 			</div>
 			
 			<div class="btn-group" role="group">
-				<button type="button" class="btn btn-default" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 추가</button>
-				<button type="button" class="btn btn-default" id="goHistory">로그 확인</button>
+				<button type="button" class="btn btn-primary" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 추가</button>
+				<button type="button" class="btn btn-primary" id="goHistory">로그 확인</button>
 			</div>
 			
 			<div style="margin-top:10px">

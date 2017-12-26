@@ -96,7 +96,6 @@
 			grid_ms.render();
 		});
     
-		
 	    // 추가 버튼 클릭
 	    var msIdCnt = 0;
 	    $("#addMilestoneBtn").on("click", function() {

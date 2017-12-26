@@ -178,16 +178,14 @@ public class MainController {
    
    /**
     * 로드맵 변경이력
+    * @throws JSONException 
     */
    @RequestMapping("/roadmapHistory")
-   public ModelAndView roadmapHistory(Model model) {
+   public ModelAndView roadmapHistory(Model model) throws JSONException {
 	   
 	   ModelAndView mav = new ModelAndView("roadmapHistory");
 	   
-	   List<TeamVo> teamList = mainService.selectTeamList();
-	   mav.addObject("teamList", teamList);
-//	   List<HistoryVO> histList = mainService.getRoadmapHistory();
-//	   mav.addObject("histList", histList);
+	   loadData(mav);
       
 	   return mav;
    }
