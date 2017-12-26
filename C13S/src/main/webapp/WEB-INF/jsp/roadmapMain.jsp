@@ -185,8 +185,8 @@ $(document).ready(function() {
  	});
  	
  	$("#goHistory").on("click", function() {
- 		alert("프로젝트 변경이력 화면 이동");
  		location.href = rootContextPath + "/roadmapHistory";
+ 		return false;
  	});
  	/* ############## 버튼 이벤트  ################ */
 });

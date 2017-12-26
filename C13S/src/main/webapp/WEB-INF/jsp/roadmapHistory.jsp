@@ -86,6 +86,11 @@ String contextPath = request.getContextPath();
 	    	getHistory(params);
 	    });
 	    
+	    // 메인으로
+	    $("#goMain").on("click", function() {
+	    	location.href = rootContextPath + "/";
+	    	return false;
+	    });
 	});
 	
 	function getHistory(params) {
@@ -126,6 +131,8 @@ String contextPath = request.getContextPath();
 				</div>
 				
 				<button class="btn btn-primary" id="searchHistory">조회</button>
+				
+				<button class="btn btn-primary" id="goMain">메인</button>
     		</form>
     	</div>
     	
