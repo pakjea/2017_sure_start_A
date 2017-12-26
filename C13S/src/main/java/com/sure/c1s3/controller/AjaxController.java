@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sure.c1s3.service.MainService;
 import com.sure.c1s3.vo.MilestoneVo;
-import com.sure.c1s3.vo.ProjectVo;
 
 @RestController
 public class AjaxController {
