@@ -8,9 +8,13 @@ public class HistoryVo {
 	private String his_Cntnt;
 	private String p_Id;
 	private String t_Id;
+	private String ms_Id;
 	private String rgst_Dt;
 	private String updt_Dt;
 	private String emp_Name;
+	
+	private String searchSt_Dt;
+	private String searchEd_Dt;
 	
 	public String getHis_Id() {
 		return his_Id;
@@ -42,6 +46,12 @@ public class HistoryVo {
 	public void setRgst_Dt(String rgst_Dt) {
 		this.rgst_Dt = rgst_Dt;
 	}
+	public String getMs_Id() {
+		return ms_Id;
+	}
+	public void setMs_Id(String ms_Id) {
+		this.ms_Id = ms_Id;
+	}
 	public String getUpdt_Dt() {
 		return updt_Dt;
 	}
@@ -54,6 +64,21 @@ public class HistoryVo {
 	public void setEmp_Name(String emp_Name) {
 		this.emp_Name = emp_Name;
 	}
+	
+	
+	public String getSearchSt_Dt() {
+		return searchSt_Dt;
+	}
+	public void setSearchSt_Dt(String searchSt_Dt) {
+		this.searchSt_Dt = searchSt_Dt;
+	}
+	public String getSearchEd_Dt() {
+		return searchEd_Dt;
+	}
+	public void setSearchEd_Dt(String searchEd_Dt) {
+		this.searchEd_Dt = searchEd_Dt;
+	}
+	
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);

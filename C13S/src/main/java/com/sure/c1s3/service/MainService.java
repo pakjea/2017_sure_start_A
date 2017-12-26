@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sure.c1s3.dao.MainDao;
+import com.sure.c1s3.vo.HistoryVo;
 import com.sure.c1s3.vo.MilestoneVo;
 import com.sure.c1s3.vo.ProjectVo;
 import com.sure.c1s3.vo.TeamVo;
@@ -24,6 +25,10 @@ public class MainService {
 	// Project
 	public List<ProjectVo> selectProjectList() {
 		return mainDao.selectProject();
+	}
+	
+	public String selectProjectMaxId() {
+		return mainDao.selectProjectMaxId();
 	}
 	
 	public int insertProject(ProjectVo projectVo) {
@@ -46,6 +51,9 @@ public class MainService {
 	public List<MilestoneVo> selectMilestoneList(String p_Id) {
 		return mainDao.selectMilestone(p_Id);
 	}
+	public String selectMilestoneMaxId() {
+		return mainDao.selectMilestoneMaxId();
+	}
 	
 	public int insertMilestone(MilestoneVo milestoneVo) {
 		return mainDao.insertMilestone(milestoneVo);
@@ -57,5 +65,18 @@ public class MainService {
 	
 	public int deleteMilestone(String ms_Id) {
 		return mainDao.deleteMilestone(ms_Id);
+	}
+	
+	public int deleteAllMilestone(String p_Id) {
+		return mainDao.deleteAllMilestone(p_Id);
+	}
+	
+	// History
+	public List<HistoryVo> selectHistoryList(HistoryVo historyVo) {
+		return mainDao.selectHistory(historyVo);
+	}
+	
+	public int insertHistory(HistoryVo historyVo) {
+		return mainDao.insertHistory(historyVo);
 	}
 }

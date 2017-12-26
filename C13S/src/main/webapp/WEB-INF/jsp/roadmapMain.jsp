@@ -97,7 +97,7 @@ body {
 
 
 $(document).ready(function() {
-
+	
  	/* ############## 결과 이벤트  ################ */
  	var result = ${result};
  	if(result == 1) {
@@ -141,7 +141,7 @@ $(document).ready(function() {
 	var timeline = new vis.Timeline(container, items, groups, options);
 	timeline.fit();
 	
-	var selProjectId;
+	var selProjectId, selTeamId;
 	container.onclick = function (event) {
         var props = timeline.getEventProperties(event);
         selProjectId = props.group;
@@ -155,7 +155,7 @@ $(document).ready(function() {
  	});
  	
  	$("#modifyProjectBtn").on("click", function() {
- 		$.each(projectList, function(key,value) {
+ 		$.each(projectList,function(key,value) {
  			if (value.p_Id == selProjectId) {
 	 			$("#m_teamId").val(value.t_Id);
 	 			$('#m_projectName').val(value.p_Name);
@@ -168,27 +168,42 @@ $(document).ready(function() {
 	 			return false;
  			}
 		});
-		
- 		$("#m_teamId").attr("disabled","disabled");
  	});
  	
  	$("#deleteProjectBtn").on("click", function() {
- 		var selectedProjectId = selProjectId; // 사용자가 선택한 프로젝트의 아이디
+ 		if(!confirm("삭제하시겠습니까?")) return;
  		var $form = $("#form_delPgt");
- 		$form.find("#delPjt_pId").val(selectedProjectId);
+ 		$.each(projectList,function(key,value) {
+ 			if (value.p_Id == selProjectId) {
+ 				$form.find("#delPjt_pId").val(value.p_Id);
+ 		 		$form.find("#delPjt_pName").val(value.p_Name);	
+ 		 		$form.find("#delPjt_tId").val(value.t_Id);
+ 		 		
+ 		 		return false;
+ 			}
+		});
+ 		
  		$("#form_delPgt").submit();
  	});
  	
  	$("#registMilestoneBtn").on("click", function() {
- 		getMilestones(selProjectId); // mileStone.jsp
+ 		$.each(projectList,function(key,value) {
+ 			if (value.p_Id == selProjectId) {
+ 				selTeamId = value.t_Id;
+	 			return false;
+ 			}
+		});
+ 		getMilestones(selProjectId, selTeamId);
+ 	});
+ 	
+ 	$("#deleteMilestoneBtn").on("click", function() {
+ 		alert("마일스톤 삭제");
  	});
  	
  	$("#goHistory").on("click", function() {
  		alert("프로젝트 변경이력 화면 이동");
- 		location.href = rootContextPath + "/roadmapHistory";
  	});
  	/* ############## 버튼 이벤트  ################ */
- 	
 });
 </script>
  
@@ -200,7 +215,7 @@ $(document).ready(function() {
 			<h1>팀</h1>
 			<div class="form-check">
 				<c:forEach items="${teamList}" var="team">
-			 		<label class="form-check-label" for="teamId"><input class="form-check-input" type="checkbox" value="${team.t_Id}">${team.t_Name}</label><br>
+			 		<label class="form-check-label" for="teamId"><input class="form-check-input" type="checkbox"  id="${team.t_Id}" value="${team.t_Id}">${team.t_Name}</label><br>
 				</c:forEach>
 			</div>
 		</div><!-- .left -->
@@ -243,16 +258,6 @@ $(document).ready(function() {
 				</div>
 			</div><!-- .modal 프로젝트 수정 -->
 			
-			<div class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-			    	<div class="modal-content">
-			     		<div class="modal-body">
-							<jsp:include page="deleteProject.jsp" />
-						</div>
-					</div>
-				</div>
-			</div><!-- .modal 프로젝트 삭제 -->
-			
 			<div class="modal fade" id="milestoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" role="document">
 			    	<div class="modal-content">
@@ -264,7 +269,6 @@ $(document).ready(function() {
 			</div><!-- .modal 마일스톤 등록, 수정 -->
 			
 			<jsp:include page="deleteProject.jsp" />
-			
 		</div><!-- .right -->
 	  </div><!-- .row -->
 	</div><!-- .container-fluid -->
