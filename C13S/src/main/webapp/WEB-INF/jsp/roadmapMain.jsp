@@ -83,44 +83,7 @@ body {
 
 
 $(document).ready(function() {
-	
-	/* ############## 버튼 이벤트  ################ */
-	$("#registProjectBtn").on("click", function() {
- 	});
- 	
- 	$("#modifyProjectBtn").on("click", function() {
- 		
- 		$.ajax({
- 			url			: rootContextPath + "/modifyProject.ajax",
- 			type		: "post",
- 			dataType 	: "json",
- 			async       : false,
- 			data		: { "p_Id" : "000001" },
- 			success		: function(result) {
- 				myInfoObj = result.rows;
- 				fnSetInfo(myInfoObj);
- 			}
- 		});
- 	});
- 	
- 	$("#deleteProjectBtn").on("click", function() {
- 		alert("프로젝트 삭제");
- 		var selectedProjectId = "test"; // 사용자가 선택한 프로젝트의 아이디
- 		var $form = $("#form_delPgt");
- 		$form.find("#delPjt_pId").val(selectedProjectId);
- 		$("#form_delPgt").submit();
- 	});
- 	
- 	$("#registMilestoneBtn").on("click", function() {
- 		getMilestones(); // mileStone.jsp
- 	});
- 	
- 	$("#goHistory").on("click", function() {
- 		alert("프로젝트 변경이력 화면 이동");
- 		location.href = rootContextPath + "/roadmapHistory";
- 	});
- 	/* ############## 버튼 이벤트  ################ */
- 	
+
  	/* ############## 결과 이벤트  ################ */
  	var result = ${result};
  	if(result == 1) {
@@ -132,10 +95,9 @@ $(document).ready(function() {
  	
  	/* ############## 타임라인 그래프  ################ */
 
-	var dataGroup = ${projectGroup};
-	   console.log(dataGroup);
-	var dataItem = ${projectList};
-	   console.log(dataItem);
+ 	var projectList  = ${projectAllList};
+	var dataGroup	 = ${projectGroup};
+	var dataItem  	 = ${projectList};
 	   
 	// timeline을 넣을 곳,
 	var container = document.getElementById('visualization');
@@ -164,6 +126,55 @@ $(document).ready(function() {
 	// 타임라인 생성/ 화면에 보임
 	var timeline = new vis.Timeline(container, items, groups, options);
 	timeline.fit();
+	
+	var selProjectId;
+	container.onclick = function (event) {
+        var props = timeline.getEventProperties(event);
+        selProjectId = props.group;
+        
+        $("div.vis-item.vis-background").css("background", "#bfbfbf");
+        $("div.vis-item.vis-background."+selProjectId).css("background", "red");
+	}
+	
+	/* ############## 버튼 이벤트  ################ */
+	$("#registProjectBtn").on("click", function() {
+ 	});
+ 	
+ 	$("#modifyProjectBtn").on("click", function() {
+ 		$.each(projectList, function(key,value) {
+ 			if (value.p_Id == selProjectId) {
+	 			$("#m_teamId").val(value.t_Id);
+	 			$('#m_projectName').val(value.p_Name);
+	 			$('#m_startDate').val(value.st_Dt);
+	 			$('#m_endDate').val(value.ed_Dt);
+	 			$('#m_projectContent').val(value.p_Cntnt);
+	 			$('#m_projectManMonth').val(value.p_Mm);
+	 			$('#m_p_Id').val(value.p_Id);
+	 			
+	 			return false;
+ 			}
+		});
+		
+ 		$("#m_teamId").attr("disabled","disabled");
+ 	});
+ 	
+ 	$("#deleteProjectBtn").on("click", function() {
+ 		var selectedProjectId = selProjectId; // 사용자가 선택한 프로젝트의 아이디
+ 		var $form = $("#form_delPgt");
+ 		$form.find("#delPjt_pId").val(selectedProjectId);
+ 		$("#form_delPgt").submit();
+ 	});
+ 	
+ 	$("#registMilestoneBtn").on("click", function() {
+ 		getMilestones(selProjectId); // mileStone.jsp
+ 	});
+ 	
+ 	$("#goHistory").on("click", function() {
+ 		alert("프로젝트 변경이력 화면 이동");
+ 		location.href = rootContextPath + "/roadmapHistory";
+ 	});
+ 	/* ############## 버튼 이벤트  ################ */
+ 	
 
 });
 </script>

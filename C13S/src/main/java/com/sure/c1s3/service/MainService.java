@@ -39,16 +39,20 @@ public class MainService {
 	}
 	
 	// Milestone
-	public List<MilestoneVo> selectMilestoneList() {
-		return mainDao.selectMilestone();
+	public List<MilestoneVo> selectAllMilestoneList() {
+		return mainDao.selectAllMilestone();
+	}
+	
+	public List<MilestoneVo> selectMilestoneList(String p_Id) {
+		return mainDao.selectMilestone(p_Id);
 	}
 	
 	public int insertMilestone(MilestoneVo milestoneVo) {
 		return mainDao.insertMilestone(milestoneVo);
 	}
 	
-	public int updateMilestone(MilestoneVo projectVo) {
-		return mainDao.updateMilestone(projectVo);
+	public int updateMilestone(MilestoneVo milestoneVo) {
+		return mainDao.updateMilestone(milestoneVo);
 	}
 	
 	public int deleteMilestone(String ms_Id) {

@@ -40,9 +40,9 @@
 	});
 	var columns = [
 		checkboxSelector.getColumnDefinition(),
-		{id: "ms_Dt", name: "일자", field: "ms_Dt"},
-		{id: "ms_Cntnt", name: "내용", field: "ms_Cntnt"},
-		{id: "writer", name: "작성자", field: "writer"},
+		{id: "ms_Dt", name: "일자", field: "ms_Dt", editor: Slick.Editors.Text},
+		{id: "ms_Cntnt", name: "내용", field: "ms_Cntnt", editor: Slick.Editors.Text},
+		{id: "writer", name: "작성자", field: "writer", editor: Slick.Editors.Text},
 	];
 	var options = {
 		enableCellNavigation: true,
@@ -74,7 +74,7 @@
 	    //grid.invalidate();
     
 	    var msIdCnt = 0;
-	    $("#msRowAddBtn").on("click", function() {
+	    $("#addMilestoneBtn").on("click", function() {
 	    	
 	    	var milestone = {ms_Id: msIdCnt++, p_Id: "", ms_Cntnt: "", ms_Dt: "", writer: "", flag: "I"};
 	    	
@@ -82,7 +82,7 @@
 			dataView.refresh();
 	    });
 	    
-		$("#msRowDelBtn").on("click", function() {
+		$("#delMilestoneBtn").on("click", function() {
 			if(!confirm("삭제하시겠습니까?")) return;
 			
 			var milestones = [];
@@ -116,18 +116,37 @@
 			
 	    });
 	    
+	    $("#saveMilestoneBtn").on("click", function() {
+    		console.log("Save row");
+    		var gridData = dataView.getItems();
+    		console.log(gridData);
+    	
+    		$.ajax({ 
+ 		  		type: "POST", 
+ 		  		url: rootContextPath + "/saveMilestones", 
+ 		  		contentType: "application/json",
+ 		  		dataType: "json",
+ 		  		data: JSON.stringify(gridData), 
+ 		  		success: function(data) { 
+ 			  		if (data == 1) {
+ 			  			alert("수정되었습니다.");
+ 			  			getMilestones(selProjectId);
+ 				  	} else {
+ 			  			alert("Error");
+ 			  		}
+ 		  		} 
+ 	  		});
+  		});
+	    
 	});
   
-	function getMilestones(){
-		alert("마일스톤 조회");
-		var project = { p_Id: "123", testTags: [{id: "1111", tag: "2222"}] };
-
+	function getMilestones(selP_Id){
+		
 		$.ajax({ 
 			type: "POST",
-			url: "/getMilestones", 
+			url: rootContextPath + "/getMilestones", 
 			contentType: "application/json", 
-			dataType : 'json',
-			data: JSON.stringify(project), 
+			data: selP_Id, 
 			success: function(data) { 
 				// This will fire the change events and update the grid.
 				dataView.setItems(data, "ms_Id");
@@ -141,41 +160,26 @@
 		
 		$.ajax({ 
 			type: "POST",
-			url: "/deleteMilestones", 
+			url: rootContextPath + "/deleteMilestones", 
 			contentType: "application/json", 
 			dataType : 'json',
 			data: JSON.stringify(milestones), 
 			success: function(data) { 
-				getMilestones();
+				getMilestones(selProjectId);
 			} 
 		});
 	}
 	
-	function saveMilestones(array){
-		alert("마일스톤 저장");
-		var milestones = array;
-		
-		$.ajax({ 
-			type: "POST",
-			url: "/updateMilestones",
-			contentType: "application/json",
-			dataType : 'json',
-			data: JSON.stringify(milestones),
-			success: function(data) {
-				getMilestones();
-			} 
-		});
-	}
  </script>
 </head>
 <body>
 	<div class="row">	
 		<div class="col-12">
 			<div class="btn-group float-right" role="group">
-			    <button type="button" class="btn btn-primary" id="msRowAddBtn">
+			    <button type="button" class="btn btn-primary" id="addMilestoneBtn">
 				  추가
 				</button>
-				<button type="button" class="btn btn-primary" id="msRowDelBtn">
+				<button type="button" class="btn btn-primary" id="delMilestoneBtn">
 				  삭제
 				</button>
 			</div>
@@ -191,10 +195,10 @@
 	<div class="row">	
 		<div class="col-12 text-center">
 			<div class="btn-group" role="group">
-				<button type="button" class="btn btn-primary">
+				<button type="button" class="btn btn-primary" id="saveMilestoneBtn">
 				  저장
 				</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal">
+				<button type="button" class="btn btn-primary" data-dismiss="modal" id="cancelMilestoneBtn">
 				  취소
 				</button>
 			</div>
