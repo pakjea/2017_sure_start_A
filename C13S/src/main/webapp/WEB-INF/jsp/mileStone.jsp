@@ -35,6 +35,7 @@
 <!--  <script src="/js/slick.grid_ms.js"></script> -->
  
  <script>
+
 	var dataView_ms = new Slick.Data.DataView();
 	var grid_ms;
 	var checkboxSelector = new Slick.CheckboxSelectColumn({
@@ -44,7 +45,7 @@
 		checkboxSelector.getColumnDefinition(),
 		{id: "ms_Dt", name: "일자", field: "ms_Dt", editor: Slick.Editors.Date},
 		{id: "ms_Cntnt", name: "내용", field: "ms_Cntnt", editor: Slick.Editors.Text},
-		{id: "writer", name: "작성자", field: "writer", editor: Slick.Editors.Text},
+		{id: "writer", name: "작성자", field: "writer", editor: Slick.Editors.Text}
 	];
 	var options_ms = {
 		enableCellNavigation: true,
@@ -127,6 +128,7 @@
 			$.each(selectedIndexes, function (index, value) {
 				var item = grid_ms.getDataItem(value);
 				milestones.push(item);
+
 			});
 			
 			$.each(ids, function(index, value) {
@@ -142,7 +144,7 @@
 	    // 저장 버튼 클릭
 	    $("#saveMilestoneBtn").on("click", function() {
     		var gridData = dataView_ms.getItems();
-    		
+
 			if(!confirm("저장하시겠습니까?")) return;
 			
 			var milestones = [];
@@ -179,6 +181,27 @@
 				// This will fire the change events and update the grid.
 				dataView_ms.setItems(data, "ms_Id");
 			} 
+		});
+	}
+	
+	
+	function saveMilestones(array){
+		var milestones = array;
+		
+		$.ajax({ 
+			type: "POST", 
+	  		url: rootContextPath + "/saveMilestones", 
+	  		contentType: "application/json",
+	  		dataType: "json",
+	  		data: JSON.stringify(milestones), 
+	  		success: function(data) { 
+		  		if (data == 1) {
+		  			alert("수정되었습니다.");
+		  			getMilestones(ms_PId, ms_TId);
+			  	} else {
+		  			alert("Error");
+		  		}
+	  		} 
 		});
 	}
 	

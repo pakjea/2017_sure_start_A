@@ -122,7 +122,7 @@ var options1 = {
 };
 
 $(document).ready(function() {
-
+	
  	/* ############## 결과 이벤트  ################ */
  	var result = ${result};
  	if(result == 1) {
@@ -141,10 +141,11 @@ $(document).ready(function() {
 	
 	// 타임라인 생성/ 화면에 보임
 	var timeline = new vis.Timeline(document.getElementById('visualization'), items, groups, options1);
-	timeline.fit();
-	
+	timeline.fit();	
+
 	var selProjectId;
 	document.getElementById('visualization').onclick = function (event) {
+
         var props = timeline.getEventProperties(event);
         selProjectId = props.group;        
         
@@ -169,7 +170,7 @@ $(document).ready(function() {
  	});
  	
  	$("#modifyProjectBtn").on("click", function() {
- 		$.each(projectList, function(key,value) {
+ 		$.each(projectList,function(key,value) {
  			if (value.p_Id == selProjectId) {
 	 			$("#m_teamId").val(value.t_Id);
 	 			$('#m_projectName').val(value.p_Name);
@@ -182,8 +183,6 @@ $(document).ready(function() {
 	 			return false;
  			}
 		});
-		
- 		$("#m_teamId").attr("disabled","disabled");
  	});
  	
  	$("#deleteProjectBtn").on("click", function() {
@@ -198,6 +197,7 @@ $(document).ready(function() {
  		 		return false;
  			}
 		});
+
  		$("#form_delPgt").submit();
  	});
  	
@@ -300,16 +300,6 @@ function check(box){
 				</div>
 			</div><!-- .modal 프로젝트 수정 -->
 			
-			<div class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-			    	<div class="modal-content">
-			     		<div class="modal-body">
-							<jsp:include page="deleteProject.jsp" />
-						</div>
-					</div>
-				</div>
-			</div><!-- .modal 프로젝트 삭제 -->
-			
 			<div class="modal fade" id="milestoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" role="document">
 			    	<div class="modal-content">
@@ -321,7 +311,6 @@ function check(box){
 			</div><!-- .modal 마일스톤 등록, 수정 -->
 			
 			<jsp:include page="deleteProject.jsp" />
-			
 		</div><!-- .right -->
 	  </div><!-- .row -->
 	</div><!-- .container-fluid -->
