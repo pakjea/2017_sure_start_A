@@ -51,7 +51,7 @@ public class MainController {
    
    /**
     * 프로젝트 등록
- * @throws JSONException 
+	* @throws JSONException 
     */
    @RequestMapping(value="/registProject",method=RequestMethod.POST)
    public ModelAndView registProject(ProjectVo projectVo) throws JSONException {
@@ -76,7 +76,7 @@ public class MainController {
   
    public JSONArray getProjectGroup(List<TeamVo> teamList, List<ProjectVo> projectList) throws JSONException {
 		JSONArray jsonArr = new JSONArray();
-	    String      teamId;
+	    String    teamId;
 	    //팀 id, 팀 이름, 그룹이름,
 	    for (TeamVo teamVo : teamList) {
 	  		teamId = teamVo.getT_Id();
@@ -160,25 +160,24 @@ public class MainController {
       
       List<TeamVo> teamList = mainService.selectTeamList();
       mav.addObject("teamList", teamList);
-      return mav;   
-   }
-   
-   /**
-    * 마일스톤 등록, 변경
-    */
-   @RequestMapping("/mileStone")
-   public String mileStone(Model model) {
       
-      return "mileStone";
+      return mav;   
    }
    
    /**
     * 로드맵 변경이력
     */
    @RequestMapping("/roadmapHistory")
-   public String roadmapHistory(Model model) {
+   public ModelAndView roadmapHistory(Model model) {
+	   
+	   ModelAndView mav = new ModelAndView("roadmapHistory");
+	   
+	   List<TeamVo> teamList = mainService.selectTeamList();
+	   mav.addObject("teamList", teamList);
+//	   List<HistoryVO> histList = mainService.getRoadmapHistory();
+//	   mav.addObject("histList", histList);
       
-      return "roadmapHistory";
+	   return mav;
    }
    
 }

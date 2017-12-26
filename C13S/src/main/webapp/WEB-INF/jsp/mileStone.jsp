@@ -25,6 +25,7 @@
  <script src="/js/slick.core.js"></script>
  
  <script src="/plugins/slick.rowselectionmodel.js"></script>
+ <script src="/plugins/slick.checkboxselectcolumn.js"></script>
  <script src="/controls/slick.columnpicker.js"></script>
  <script src="/js/slick.formatters.js"></script>
  <script src="/js/slick.editors.js"></script>
@@ -32,70 +33,139 @@
  <script src="/js/slick.dataview.js"></script>
  
  <script>
-  var dataView = new Slick.Data.DataView();
-  var grid;
-  var columns = [
-    {id: "ms_Dt", name: "일자", field: "ms_Dt"},
-    {id: "ms_Cntnt", name: "내용", field: "ms_Cntnt"},
-    {id: "writer", name: "작성자", field: "writer"},
-  ];
-  var options = {
-    enableCellNavigation: true,
-    enableColumnReorder: false,
-    forceFitColumns: true
-  }
-  
-  //Make the grid respond to DataView change events.
-  dataView.onRowCountChanged.subscribe(function (e, args) {
-    grid.updateRowCount();
-    grid.render();
-  });
+	var dataView = new Slick.Data.DataView();
+	var grid;
+	var checkboxSelector = new Slick.CheckboxSelectColumn({
+		cssClass: "slick-cell-checkboxsel"
+	});
+	var columns = [
+		checkboxSelector.getColumnDefinition(),
+		{id: "ms_Dt", name: "일자", field: "ms_Dt"},
+		{id: "ms_Cntnt", name: "내용", field: "ms_Cntnt"},
+		{id: "writer", name: "작성자", field: "writer"},
+	];
+	var options = {
+		enableCellNavigation: true,
+		enableColumnReorder: false,
+		forceFitColumns: true,
+		editable: true,
+		asyncEditorLoading: false,
+		autoEdit: false
+	}
 
-  dataView.onRowsChanged.subscribe(function (e, args) {
-    grid.invalidateRows(args.rows);
-    grid.render();
-  });
+	//Make the grid respond to DataView change events.
+	dataView.onRowCountChanged.subscribe(function (e, args) {
+		grid.updateRowCount();
+		grid.render();
+	});
+	
+	dataView.onRowsChanged.subscribe(function (e, args) {
+		grid.invalidateRows(args.rows);
+		grid.render();
+	});
   
-  $(function () {
-	  
-	// 그리드 생성
-    grid = new Slick.Grid("#myGrid", dataView, columns, options);
-    grid.setSelectionModel(new Slick.RowSelectionModel());
+	$(function () {
+		  
+		// 그리드 생성
+	    grid = new Slick.Grid("#myGrid", dataView, columns, options);
+	    grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
+	    grid.registerPlugin(checkboxSelector);
+	    
+	    //grid.invalidate();
     
-    //grid.invalidate();
-    
-    $("#msRowAddBtn").on("click", function() {
-    	 dataView.addItem({ms_Id: "0", ms_Dt: "1", ms_Cntnt: "", writer:""});
-    	 dataView.refresh();
-    });
-    
-	$("#msRowDelBtn").on("click", function() {
-		var selectedRowIds = grid.getSelectedRows();
-		var selectedRowId = 0;
+	    var msIdCnt = 0;
+	    $("#msRowAddBtn").on("click", function() {
+	    	
+	    	var milestone = {ms_Id: msIdCnt++, p_Id: "", ms_Cntnt: "", ms_Dt: "", writer: "", flag: "I"};
+	    	
+			dataView.addItem(milestone);
+			dataView.refresh();
+	    });
+	    
+		$("#msRowDelBtn").on("click", function() {
+			if(!confirm("삭제하시겠습니까?")) return;
+			
+			var milestones = [];
+			var ids = [];
+			var selectedIndexes = [];
+
+			selectedIndexes = grid.getSelectedRows();
+			
+			if(selectedIndexes.length == 0) {
+				alert("삭제할 마일스톤을 선택해 주세요.");
+			}
+			
+			$.each(selectedIndexes, function (index, value) {
+				var item = grid.getDataItem(value);
+				
+				if(item.flag == "I") {
+					ids.push(item.ms_Id);
+				} else {
+					milestones.push(item);
+				}
+				
+			});
+			
+			$.each(ids, function(index, value) {
+				dataView.deleteItem(value);
+			});
+			
+			if(milestones.length > 0) {
+				deleteMilestones(milestones);
+			}
+			
+	    });
+	    
+	});
+  
+	function getMilestones(){
+		alert("마일스톤 조회");
+		var project = { p_Id: "123", testTags: [{id: "1111", tag: "2222"}] };
+
+		$.ajax({ 
+			type: "POST",
+			url: "/getMilestones", 
+			contentType: "application/json", 
+			dataType : 'json',
+			data: JSON.stringify(project), 
+			success: function(data) { 
+				// This will fire the change events and update the grid.
+				dataView.setItems(data, "ms_Id");
+			} 
+		});
+	}
+	
+	function deleteMilestones(array){
+		alert("마일스톤 삭제");
+		var milestones = array;
 		
-    	dataView.deleteItem(selectedRowId);
-    	dataView.refresh();
-    });
-    
-  });
-  
-  function getMilestones(){
-	  alert("마일스톤 조회");
-	  var project = { p_Id: "123", testTags: [{id: "1111", tag: "2222"}] }; 
-
-	  $.ajax({ 
-		  type: "POST", 
-		  url: "/getMilestones", 
-		  contentType: "application/json", 
-		  dataType : 'json',
-		  data: JSON.stringify(project), 
-		  success: function(data) { 
-			  console.log(data); 
-			  // This will fire the change events and update the grid.
-			  dataView.setItems(data, "ms_Id");
-		  } 
-	  });
-  }
+		$.ajax({ 
+			type: "POST",
+			url: "/deleteMilestones", 
+			contentType: "application/json", 
+			dataType : 'json',
+			data: JSON.stringify(milestones), 
+			success: function(data) { 
+				getMilestones();
+			} 
+		});
+	}
+	
+	function saveMilestones(array){
+		alert("마일스톤 저장");
+		var milestones = array;
+		
+		$.ajax({ 
+			type: "POST",
+			url: "/updateMilestones",
+			contentType: "application/json",
+			dataType : 'json',
+			data: JSON.stringify(milestones),
+			success: function(data) {
+				getMilestones();
+			} 
+		});
+	}
  </script>
 </head>
 <body>
