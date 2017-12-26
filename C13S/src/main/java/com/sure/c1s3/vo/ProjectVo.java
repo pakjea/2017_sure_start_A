@@ -13,6 +13,7 @@ public class ProjectVo {
 	private String ed_Dt;
 	private String rgst_Dt;
 	private String updt_Dt;
+	private String his_Cntnt;
 	
 	public String getT_Id() {
 		return t_Id;
@@ -67,6 +68,13 @@ public class ProjectVo {
 	}
 	public void setUpdt_Dt(String updt_Dt) {
 		this.updt_Dt = updt_Dt;
+	}
+	
+	public String getHis_Cntnt() {
+		return his_Cntnt;
+	}
+	public void setHis_Cntnt(String his_Cntnt) {
+		this.his_Cntnt = his_Cntnt;
 	}
 	
 	@Override

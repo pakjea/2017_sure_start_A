@@ -215,7 +215,7 @@ public class MainController {
 		if 		  (division.equals("1")) {	// 추가
 			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 추가");
 		} else if (division.equals("2")) {	// 수정
-			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 수정");
+			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 변경 : " + projectVo.getHis_Cntnt());
 		} else if (division.equals("3")) {	// 삭제
 			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 삭제");
 		}
