@@ -148,6 +148,7 @@ $(document).ready(function() {
         
         $("div.vis-item.vis-background").css("background", "#bfbfbf");
         $("div.vis-item.vis-background."+selProjectId).css("background", "red");
+        
 	}
 	
 	/* ############## 버튼 이벤트  ################ */

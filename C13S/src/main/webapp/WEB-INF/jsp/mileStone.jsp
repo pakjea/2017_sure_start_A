@@ -17,10 +17,12 @@
       border-right-color: silver;
       border-right-style: solid;
     }
+    .ui-datepicker{ z-index: 9999 !important;}
  </style>
  
  <script src="/js/jquery-1.7.min.js"></script>
  <script src="/js/jquery.event.drag-2.2.js"></script>
+ <script src="/js/jquery-ui-1.8.16.custom.min.js"></script>
  
  <script src="/js/slick.core.js"></script>
  
@@ -40,7 +42,7 @@
 	});
 	var columns = [
 		checkboxSelector.getColumnDefinition(),
-		{id: "ms_Dt", name: "일자", field: "ms_Dt", editor: Slick.Editors.Text},
+		{id: "ms_Dt", name: "일자", field: "ms_Dt", editor: Slick.Editors.Date},
 		{id: "ms_Cntnt", name: "내용", field: "ms_Cntnt", editor: Slick.Editors.Text},
 		{id: "writer", name: "작성자", field: "writer", editor: Slick.Editors.Text},
 	];
@@ -179,15 +181,12 @@
 			    <button type="button" class="btn btn-primary" id="addMilestoneBtn">
 				  추가
 				</button>
-				<button type="button" class="btn btn-primary" id="delMilestoneBtn">
-				  삭제
-				</button>
 			</div>
 		</div>
 	</div>
 	
     <div class="row">	
-		<div class="col-12">
+		<div class="col-12" style="position: relative;">
 	    	<div id="myGrid" style="width:460px;height:200px;margin:5px;"></div>
 	    </div>
     </div>
@@ -197,6 +196,9 @@
 			<div class="btn-group" role="group">
 				<button type="button" class="btn btn-primary" id="saveMilestoneBtn">
 				  저장
+				</button>
+				<button type="button" class="btn btn-primary" id="delMilestoneBtn">
+				  삭제
 				</button>
 				<button type="button" class="btn btn-primary" data-dismiss="modal" id="cancelMilestoneBtn">
 				  취소
