@@ -69,22 +69,6 @@
 	    grid_ms.onClick.subscribe(function (e, args) {
 	        
 	        // 체크박스
-<<<<<<< HEAD
-		    if (column.selectable == true) {
-		    	var array = grid_ms.getSelectedRows();
-		    	var current = args.row;
-		    	var searchedIndex = $.inArray(current, array);
-		    	
-		    	if(searchedIndex >= 0){
-		            array.splice(searchedIndex, 1);
-		    	} else {
-		    		array.push(args.row);
-		    	}
-		    	
-		    	grid_ms.setSelectedRows(array);
-		    	grid_ms.invalidate();
-		    }
-=======
 // 	    	var array = grid_ms.getSelectedRows();
 // 	    	var current = args.row;
 // 	    	var searchedIndex = $.inArray(current, array);
@@ -96,7 +80,6 @@
 // 	    	}
 	    	
 // 	    	grid_ms.setSelectedRows(array);
->>>>>>> refs/heads/searchHistory
 	    });
 	    
 	    //Make the grid respond to DataView change events.
