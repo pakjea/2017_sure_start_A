@@ -52,7 +52,7 @@
 		forceFitColumns: true,
 		editable: true,
 		asyncEditorLoading: false,
-		autoEdit: false
+		autoEdit: true
 	}
 	
 	$(function () {
@@ -64,25 +64,21 @@
 	    
 	    //grid_ms.invalidate();
 	    
+	    // 그리드 클릭 이벤트
 	    grid_ms.onClick.subscribe(function (e, args) {
-// 	        var row = args.grid.getData().getItems()[args.row];
-	        var column = args.grid.getColumns()[args.cell];
 	        
 	        // 체크박스
-		    if (column.selectable == true) {
-		    	var array = grid_ms.getSelectedRows();
-		    	var current = args.row;
-		    	var searchedIndex = $.inArray(current, array);
-		    	
-		    	if(searchedIndex >= 0){
-		            array.splice(searchedIndex, 1);
-		    	} else {
-		    		array.push(args.row);
-		    	}
-		    	
-		    	grid_ms.setSelectedRows(array);
-		    	grid_ms.invalidate();
-		    }
+// 	    	var array = grid_ms.getSelectedRows();
+// 	    	var current = args.row;
+// 	    	var searchedIndex = $.inArray(current, array);
+	    	
+// 	    	if(searchedIndex >= 0){
+// 	            array.splice(searchedIndex, 1);
+// 	    	} else {
+// 	    		array.push(args.row);
+// 	    	}
+	    	
+// 	    	grid_ms.setSelectedRows(array);
 	    });
 	    
 	    //Make the grid respond to DataView change events.
@@ -167,7 +163,6 @@
  		  		} 
  	  		});
   		});
-	    
 	});
   
 	function getMilestones(selP_Id){

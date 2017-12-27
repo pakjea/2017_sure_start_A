@@ -266,7 +266,7 @@ function check(box){
 				<div id="visualization"></div>
 			</div>
 			
-			<div class="modal fade" id="registProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal fade" id="registProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
 				<div class="modal-dialog" role="document">
 			    	<div class="modal-content">
 			     		<div class="modal-body">
@@ -276,7 +276,7 @@ function check(box){
 				</div>
 			</div><!-- .modal 프로젝트 등록 -->
 			
-			<div class="modal fade" id="modifyProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal fade" id="modifyProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
 				<div class="modal-dialog" role="document">
 			    	<div class="modal-content">
 			     		<div class="modal-body">
@@ -286,17 +286,10 @@ function check(box){
 				</div>
 			</div><!-- .modal 프로젝트 수정 -->
 			
-			<div class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-			    	<div class="modal-content">
-			     		<div class="modal-body">
-							<jsp:include page="deleteProject.jsp" />
-						</div>
-					</div>
-				</div>
-			</div><!-- .modal 프로젝트 삭제 -->
+			<jsp:include page="deleteProject.jsp" />
+			<!-- 프로젝트 삭제 FORM -->
 			
-			<div class="modal fade" id="milestoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal fade" id="milestoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
 				<div class="modal-dialog" role="document">
 			    	<div class="modal-content">
 			     		<div class="modal-body">
@@ -305,8 +298,6 @@ function check(box){
 					</div>
 				</div>
 			</div><!-- .modal 마일스톤 등록, 수정 -->
-			
-			<jsp:include page="deleteProject.jsp" />
 			
 		</div><!-- .right -->
 	  </div><!-- .row -->
