@@ -1,5 +1,6 @@
 package com.sure.c1s3.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +73,8 @@ public class MainService {
 	}
 	
 	// History
-	public List<HistoryVo> selectHistoryList(HistoryVo historyVo) {
-		return mainDao.selectHistory(historyVo);
+	public List<HistoryVo> selectHistoryList(HashMap<String, String> params) {
+		return mainDao.selectHistory(params);
 	}
 	
 	public int insertHistory(HistoryVo historyVo) {

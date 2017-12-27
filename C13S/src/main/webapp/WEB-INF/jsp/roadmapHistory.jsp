@@ -39,7 +39,7 @@ String contextPath = request.getContextPath();
 	 <script src="/js/jquery.event.drag-2.2.js"></script>
 	 
 	 <script src="/js/slick.core.js"></script>
-	 
+	 <script src="/js/slick.formatters.js"></script>
 	 <script src="/plugins/slick.rowselectionmodel.js"></script>
 	 <script src="/js/slick.grid.js"></script>
 	 <script src="/js/slick.dataview.js"></script>
@@ -48,9 +48,9 @@ String contextPath = request.getContextPath();
 	var dataView = new Slick.Data.DataView();
 	var grid;
 	var columns = [
-		{id: "updt_Dt", name: "일자", field: "ms_Dt"},
-		{id: "his_Cntnt", name: "내용", field: "ms_Cntnt"},
-		{id: "writer", name: "작성자", field: "writer"},
+		{id: "rgst_Dt", name: "일자", field: "rgst_Dt", formatter: Slick.Formatters.yymmddhhmiss},
+		{id: "his_Cntnt", name: "내용", field: "his_Cntnt"},
+		{id: "emp_Name", name: "마일스톤 작성자", field: "emp_Name"},
 	];
 	var options = {
 		enableCellNavigation: true,
@@ -103,6 +103,7 @@ String contextPath = request.getContextPath();
 			data: JSON.stringify(params), 
 			success: function(data) { 
 				// This will fire the change events and update the grid.
+				console.log(data);
 				dataView.setItems(data, "his_Id");
 			} 
 		});
@@ -112,33 +113,35 @@ String contextPath = request.getContextPath();
 </head>
 <body>
     <div class="container-fluid">
-    	<div class="row">
-    		<form class="form-inline" id="searchHistoryForm">
-				<label for="startDate">기간</label>
-				<div class="input-group" style="padding:10px;">
-				  <input type="date" class="form-control" id="startDate" name="st_Dt" value="${today}" required>
-				  <div class="input-group-addon">to</div>
-				  <input type="date" class="form-control" id="endDate" name="ed_Dt" value="${today}" required>
-				</div>
-   			
-				<label for="teamId">부서</label>
-				<div class="input-group" style="padding:10px;">
-					<select id="teamId" name="t_Id" class="custom-select">
-						<c:forEach items="${teamList}" var="team">
-					 		<option label="${team.t_Name}" value="${team.t_Id}"></option>
-						</c:forEach>
-					</select>
-				</div>
-				
-				<button class="btn btn-primary" id="searchHistory">조회</button>
-				
-				<button class="btn btn-primary" id="goMain">메인</button>
-    		</form>
+		<div class="row">
+			<div class="col-12">
+	    		<div class="form-inline" id="searchHistoryForm">
+					<label for="startDate">기간</label>
+					<div class="input-group" style="padding:10px;">
+					  <input type="date" class="form-control" id="startDate" name="st_Dt" value="${today}" required>
+					  <div class="input-group-addon">to</div>
+					  <input type="date" class="form-control" id="endDate" name="ed_Dt" value="${today}" required>
+					</div>
+	   			
+					<label for="teamId">부서</label>
+					<div class="input-group" style="padding:10px;">
+						<select id="teamId" name="t_Id" class="custom-select">
+							<c:forEach items="${teamList}" var="team">
+						 		<option label="${team.t_Name}" value="${team.t_Id}"></option>
+							</c:forEach>
+						</select>
+					</div>
+					<button class="btn btn-primary" id="searchHistory">조회</button>
+					<button class="btn btn-primary" id="goMain">메인</button>
+	    		</div>
+    		</div>
     	</div>
     	
-    	<div class="row">
-    		<div id="myGrid"></div>
-    	</div>
+		<div class="row">	
+			<div class="col-12" style="position: relative;">
+		    	<div id="myGrid" style="height:850px;margin:5px;"></div>
+		    </div>
+	    </div>
     </div>
 </body>
 </html>

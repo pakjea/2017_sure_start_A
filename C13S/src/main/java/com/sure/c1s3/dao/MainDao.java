@@ -1,5 +1,6 @@
 package com.sure.c1s3.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
@@ -70,11 +71,10 @@ public interface MainDao {
 	int deleteAllMilestone(String p_Id);
 	
 	// History
-	@Select("SELECT HIS_ID, HIS_CNTNT, P_ID, T_ID, EMP_NAME, RGST_DT FROM teamA.HISTORY WHERE 1=1"
-			+ " <if test=\"searchSt_Dt != null\"> RGST_DT BETWEEN #{searchSt_Dt} AND #{searchEd_Dt}</if>"
-			+ " <if test=\"t_Id != null\"> T_ID = #{t_Id}</if>"
+	@Select("SELECT HIS_ID, SUBSTRING(HIS_ID, 1, 14) AS RGST_DT, HIS_CNTNT, P_ID, T_ID, EMP_NAME FROM teamA.HISTORY "
+			+ " WHERE RGST_DT BETWEEN #{st_Dt} AND #{ed_Dt} AND T_ID = #{t_Id}"
 			+ " ORDER BY HIS_ID")
-	List<HistoryVo> selectHistory(HistoryVo historyVo);
+	List<HistoryVo> selectHistory(HashMap<String, String> params);
 	
 	@Insert("INSERT INTO teamA.HISTORY(HIS_ID, HIS_CNTNT, P_ID, T_ID, EMP_NAME, RGST_DT)"
 			+ " VALUES (#{his_Id}, #{his_Cntnt}, #{p_Id}, #{t_Id}, #{emp_Name}, CURDATE())")

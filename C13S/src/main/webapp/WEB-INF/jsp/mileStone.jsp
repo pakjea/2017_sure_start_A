@@ -55,6 +55,8 @@
 		asyncEditorLoading: false,
 		autoEdit: false
 	}
+
+	var ms_PId, ms_TId;
 	
 	$(function () {
 		 
@@ -70,20 +72,20 @@
 	        var column = args.grid.getColumns()[args.cell];
 	        
 	        // 체크박스
-		    if (column.selectable == true) {
-		    	var array = grid_ms.getSelectedRows();
-		    	var current = args.row;
-		    	var searchedIndex = $.inArray(current, array);
+// 		    if (column.selectable == true) {
+// 		    	var array = grid_ms.getSelectedRows();
+// 		    	var current = args.row;
+// 		    	var searchedIndex = $.inArray(current, array);
 		    	
-		    	if(searchedIndex >= 0){
-		            array.splice(searchedIndex, 1);
-		    	} else {
-		    		array.push(args.row);
-		    	}
+// 		    	if(searchedIndex >= 0){
+// 		            array.splice(searchedIndex, 1);
+// 		    	} else {
+// 		    		array.push(args.row);
+// 		    	}
 		    	
-		    	grid_ms.setSelectedRows(array);
-		    	grid_ms.invalidate();
-		    }
+// 		    	grid_ms.setSelectedRows(array);
+// 		    	grid_ms.invalidate();
+// 		    }
 	    });
 	    
 	    //Make the grid respond to DataView change events.
@@ -100,7 +102,7 @@
 	    // 추가 버튼 클릭
 	    var msIdCnt = 0;
 	    $("#addMilestoneBtn").on("click", function() {
-	    	var milestone = {ms_Id: msIdCnt++, p_Id: "", ms_Cntnt: "", ms_Dt: "", writer: "", flag: "I"};
+	    	var milestone = {ms_Id: msIdCnt++, p_Id: ms_PId, t_Id: ms_TId, ms_Cntnt: "", ms_Dt: "", writer: "", flag: "I"};
 	    	
 			dataView_ms.addItem(milestone);
 			dataView_ms.refresh();
@@ -151,17 +153,21 @@
 			var ids = [];
 			var selectedIndexes = [];
 
-			selectedIndexes = grid.getSelectedRows();
+			selectedIndexes = grid_ms.getSelectedRows();
 			
 			if(selectedIndexes.length == 0) {
 				alert("수정할 마일스톤을 선택해 주세요.");
 			}
 			
 			$.each(selectedIndexes, function (index, value) {
-				var item = grid.getDataItem(value);
+				var item = grid_ms.getDataItem(value);
 				milestones.push(item);	
 			});
     		
+
+			console.log(ms_TId);
+			console.log(milestones);
+			
 			if(milestones.length > 0) {
 				saveMilestones(milestones);
 			}
@@ -172,6 +178,7 @@
 	function getMilestones(selP_Id, selT_Id){
 		ms_PId = selP_Id;
 		ms_TId = selT_Id;
+		
 		$.ajax({ 
 			type: "POST",
 			url: rootContextPath + "/getMilestones", 

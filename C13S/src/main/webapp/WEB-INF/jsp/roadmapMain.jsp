@@ -143,7 +143,7 @@ $(document).ready(function() {
 	var timeline = new vis.Timeline(document.getElementById('visualization'), items, groups, options1);
 	timeline.fit();	
 
-	var selProjectId;
+	var selProjectId, selTeamId;
 	document.getElementById('visualization').onclick = function (event) {
 
         var props = timeline.getEventProperties(event);
@@ -233,16 +233,12 @@ function check(box){
 		
 		for(var j in nest.nestedGroups){
 			groups.update({id : nest.nestedGroups[j], visible : true});
-			console.log(nest.nestedGroups[j]);
-			
 		}
 	}else{
 		groups.update({id : box.value, showNested : false});//
 		
 		for(var j in nest.nestedGroups){
 			groups.update({id : nest.nestedGroups[j], visible : false});
-			console.log(nest.nestedGroups[j]);
-			
 		}
 	}
 }
