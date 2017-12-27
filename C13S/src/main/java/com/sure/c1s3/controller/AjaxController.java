@@ -139,7 +139,7 @@ public class AjaxController {
 		} else if (division.equals("3")) {	// 삭제
 			historyVo.setHis_Cntnt("마일스톤 삭제");
 		}
-		;
+		
 		historyVo.setHis_Id(strDate);
 		historyVo.setP_Id(milestoneVo.getP_Id());
 		historyVo.setT_Id(milestoneVo.getT_Id());
@@ -151,18 +151,7 @@ public class AjaxController {
 	
 	@RequestMapping(value="/getHistoryList", method=RequestMethod.POST)
 	public List<HistoryVo> getHistoryList(@RequestBody HashMap<String, String> params){
-//		List<HistoryVo> historyList = new ArrayList<HistoryVo>();
-		
-		System.out.println(params);
-		
-		params.get("t_Id");
-		params.get("st_Dt");
-		params.get("ed_Dt");
-		
 		List<HistoryVo> historyList = mainService.selectHistoryList(params);
-		
-		System.out.println(historyList);
-		
 		return historyList;
 	}
 }

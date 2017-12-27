@@ -53,7 +53,7 @@
 		forceFitColumns: true,
 		editable: true,
 		asyncEditorLoading: false,
-		autoEdit: false
+		autoEdit: true
 	}
 
 	var ms_PId, ms_TId;
@@ -67,9 +67,8 @@
 	    
 	    //grid_ms.invalidate();
 	    
+	    // 그리드 클릭 이벤트
 	    grid_ms.onClick.subscribe(function (e, args) {
-// 	        var row = args.grid.getData().getItems()[args.row];
-	        var column = args.grid.getColumns()[args.cell];
 	        
 	        // 체크박스
 // 		    if (column.selectable == true) {
@@ -172,13 +171,11 @@
 				saveMilestones(milestones);
 			}
   		});
-	    
 	});
   
 	function getMilestones(selP_Id, selT_Id){
 		ms_PId = selP_Id;
 		ms_TId = selT_Id;
-		
 		$.ajax({ 
 			type: "POST",
 			url: rootContextPath + "/getMilestones", 

@@ -73,9 +73,7 @@
 		</div>
 		</div>
 		
-		<!-- TODO: 추후 히든으로 전환 : 프로젝트 아이디 -->
-		p_Id<input type="text" id="m_p_Id" name="p_Id" value="">
-		(TODO: 추후 히든으로 전환)
+		<input type="hidden" id="m_p_Id" name="p_Id" value="">
 		
 		<button type="submit" class="btn btn-primary">수정</button>
 		<button type="button" class="btn btn-primary" data-dismiss="modal" id="cancelModPjtBtn">취소</button>
