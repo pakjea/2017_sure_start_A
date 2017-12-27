@@ -21,15 +21,15 @@ public interface MainDao {
 	List<TeamVo> selectTeam();
 	
 	// Project
-	@Select("SELECT P_ID, T_ID, P_NAME, P_CNTNT, ST_DT, ED_DT, P_MM, RGST_DT, UPDT_DT FROM teamA.PROJECT ORDER BY T_ID, P_ID")
+	@Select("SELECT P_ID, T_ID, P_NAME, P_CNTNT, ST_DT, ED_DT, P_MM, RGST_DT, UPDT_DT, PLAN_ST_DT, PLAN_ED_DT FROM teamA.PROJECT ORDER BY T_ID, P_ID")
 	List<ProjectVo> selectProject();
 	
 	@Select("SELECT LPAD(MAX(CONVERT(P_ID, UNSIGNED)) + 1, 8, '0') FROM teamA.PROJECT")
 	String selectProjectMaxId();
 	
-	@Insert("INSERT INTO teamA.PROJECT(P_ID, T_ID, P_NAME, P_CNTNT, ST_DT, ED_DT, P_MM, RGST_DT)"
+	@Insert("INSERT INTO teamA.PROJECT(P_ID, T_ID, P_NAME, P_CNTNT, ST_DT, ED_DT, P_MM, RGST_DT, PLAN_ST_DT, PLAN_ED_DT)"
 			+ " VALUES (#{p_Id}, #{t_Id}, #{p_Name}, #{p_Cntnt}, "
-			+ " STR_TO_DATE(#{st_Dt}, '%Y-%m-%d'), STR_TO_DATE(#{ed_Dt}, '%Y-%m-%d'), CONVERT(#{p_Mm}, UNSIGNED), CURDATE())")
+			+ " STR_TO_DATE(#{st_Dt}, '%Y-%m-%d'), STR_TO_DATE(#{ed_Dt}, '%Y-%m-%d'), CONVERT(#{p_Mm}, UNSIGNED), CURDATE(), STR_TO_DATE(#{plan_St_Dt}, '%Y-%m-%d'), STR_TO_DATE(#{plan_Ed_Dt}, '%Y-%m-%d'))")
 	int insertProject(ProjectVo projectVo);
 	
 	@Update("UPDATE teamA.PROJECT "

@@ -43,7 +43,7 @@
 	});
 	var columns_ms = [
 		checkboxSelector.getColumnDefinition(),
-		{id: "ms_Dt", name: "일자", field: "ms_Dt", editor: Slick.Editors.Date},
+		{id: "ms_Dt", name: "일자", field: "ms_Dt", editor: Slick.Editors.Date, cssClass: "cell-centered"},
 		{id: "ms_Cntnt", name: "내용", field: "ms_Cntnt", editor: Slick.Editors.Text},
 		{id: "writer", name: "작성자", field: "writer", editor: Slick.Editors.Text}
 	];

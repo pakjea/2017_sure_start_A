@@ -14,6 +14,8 @@ public class ProjectVo {
 	private String rgst_Dt;
 	private String updt_Dt;
 	private String his_Cntnt;
+	private String plan_St_Dt;
+	private String plan_Ed_Dt;
 	
 	public String getT_Id() {
 		return t_Id;
@@ -77,6 +79,18 @@ public class ProjectVo {
 		this.his_Cntnt = his_Cntnt;
 	}
 	
+	public String getPlan_St_Dt() {
+		return plan_St_Dt;
+	}
+	public void setPlan_St_Dt(String plan_St_Dt) {
+		this.plan_St_Dt = plan_St_Dt;
+	}
+	public String getPlan_Ed_Dt() {
+		return plan_Ed_Dt;
+	}
+	public void setPlan_Ed_Dt(String plan_Ed_Dt) {
+		this.plan_Ed_Dt = plan_Ed_Dt;
+	}
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);

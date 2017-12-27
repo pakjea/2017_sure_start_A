@@ -23,215 +23,240 @@ import com.sure.c1s3.vo.TeamVo;
 
 @Controller
 public class MainController {
-   
-   @Autowired
-   private MainService mainService;
-   
-   /**
-    * 로드맵 메인
-    * @throws JSONException 
-    */
-   @RequestMapping("/")
-   public ModelAndView roadmapMain(Model model) throws JSONException {
-      
-	    ModelAndView mav = new ModelAndView("roadmapMain");
-	    model.addAttribute("result", -1);
-	      
-	    loadData(mav);
-	   
+
+	@Autowired
+	private MainService mainService;
+
+	/**
+	 * 로드맵 메인
+	 * 
+	 * @throws JSONException
+	 */
+	@RequestMapping("/")
+	public ModelAndView roadmapMain(Model model) throws JSONException {
+
+		ModelAndView mav = new ModelAndView("roadmapMain");
+		model.addAttribute("result", -1);
+
+		loadData(mav);
+
 		return mav;
 
-   }
-   
-   /**
-    * 프로젝트 등록
-    * @throws JSONException 
-    */
-   @RequestMapping(value="/registProject",method=RequestMethod.POST)
-   public ModelAndView registProject(ProjectVo projectVo) throws JSONException {
-      
-      String maxId = mainService.selectProjectMaxId();
-      projectVo.setP_Id(maxId);
-      
-      int result = mainService.insertProject(projectVo);
-      if(result == 1) {
-    	  insertProjectHistory(projectVo, "1");
-      }
-      
-      ModelAndView mav = new ModelAndView("roadmapMain");
-      mav.addObject("result", result);
-      
-      loadData(mav);
-      
-      return mav;   
-   }
-   
-   /**
-    * 프로젝트 변경
-    * @throws JSONException 
-    */
-   @RequestMapping(value="/modifyProject",method=RequestMethod.POST)
-   public ModelAndView modifyProject(ProjectVo projectVo) throws JSONException {
-      
-      int result = mainService.updateProject(projectVo);
-      if(result == 1) {
-    	  insertProjectHistory(projectVo, "2");
-      }
-      
-      ModelAndView mav = new ModelAndView("roadmapMain");
-      mav.addObject("result", result);
-      
-      loadData(mav);
-      
-      return mav;   
-   }
-   
-   /**
-    * 프로젝트 삭제
-    * @throws JSONException 
-    */
-   @RequestMapping(value="/deleteProject",method=RequestMethod.POST)
-   public ModelAndView deleteProject(ProjectVo projectVo) throws JSONException {
-	   
-      int result = mainService.deleteProject(projectVo.getP_Id());
-      if(result == 1) {
-    	  mainService.deleteAllMilestone(projectVo.getP_Id());
-    	  insertProjectHistory(projectVo, "3");
-      }
-      
-      ModelAndView mav = new ModelAndView("roadmapMain");
-      mav.addObject("result", result);
-      
-      loadData(mav);
-   
-      return mav;   
-   }
-   
-   public JSONArray getProjectGroup(List<TeamVo> teamList, List<ProjectVo> projectList) throws JSONException {
+	}
+
+	/**
+	 * 프로젝트 등록
+	 * 
+	 * @throws JSONException
+	 */
+	@RequestMapping(value = "/registProject", method = RequestMethod.POST)
+	public ModelAndView registProject(ProjectVo projectVo) throws JSONException {
+
+		String maxId = mainService.selectProjectMaxId();
+		projectVo.setP_Id(maxId);
+		projectVo.setPlan_St_Dt(projectVo.getSt_Dt());
+		projectVo.setPlan_Ed_Dt(projectVo.getEd_Dt());
+
+		int result = mainService.insertProject(projectVo);
+		if (result == 1) {
+			insertProjectHistory(projectVo, "1");
+		}
+
+		ModelAndView mav = new ModelAndView("roadmapMain");
+		mav.addObject("result", result);
+
+		loadData(mav);
+
+		return mav;
+	}
+
+	/**
+	 * 프로젝트 변경
+	 * 
+	 * @throws JSONException
+	 */
+	@RequestMapping(value = "/modifyProject", method = RequestMethod.POST)
+	public ModelAndView modifyProject(ProjectVo projectVo) throws JSONException {
+
+		int result = mainService.updateProject(projectVo);
+		if (result == 1) {
+			insertProjectHistory(projectVo, "2");
+		}
+
+		ModelAndView mav = new ModelAndView("roadmapMain");
+		mav.addObject("result", result);
+
+		loadData(mav);
+
+		return mav;
+	}
+
+	/**
+	 * 프로젝트 삭제
+	 * 
+	 * @throws JSONException
+	 */
+	@RequestMapping(value = "/deleteProject", method = RequestMethod.POST)
+	public ModelAndView deleteProject(ProjectVo projectVo) throws JSONException {
+
+		int result = mainService.deleteProject(projectVo.getP_Id());
+		if (result == 1) {
+			mainService.deleteAllMilestone(projectVo.getP_Id());
+			insertProjectHistory(projectVo, "3");
+		}
+
+		ModelAndView mav = new ModelAndView("roadmapMain");
+		mav.addObject("result", result);
+
+		loadData(mav);
+
+		return mav;
+	}
+
+	public JSONArray getProjectGroup(List<TeamVo> teamList, List<ProjectVo> projectList) throws JSONException {
 		JSONArray jsonArr = new JSONArray();
-	    String      teamId;
-	    //팀 id, 팀 이름, 그룹이름,
-	    for (TeamVo teamVo : teamList) {
-	  		teamId = teamVo.getT_Id();
-	         
-	        JSONObject jsonTeamObj = new JSONObject();
-	         
-	        jsonTeamObj.put("id", teamId);
-	      	jsonTeamObj.put("className"	, teamVo.getT_Id());
-	        jsonTeamObj.put("content", teamVo.getT_Name());
-	        jsonTeamObj.put("showNested", false);
-	        jsonArr.put(jsonTeamObj);
-	         
-	        List<String> nest = new ArrayList<String>();
-	         
-	        for (ProjectVo vo : projectList) {
-	            if (teamId.equals(vo.getT_Id())) {
-	            	nest.add(vo.getP_Id());
-	            	JSONObject jsonObj = new JSONObject();
-	            	jsonObj.put("id"		, vo.getP_Id() );
-	            	jsonObj.put("content"	, vo.getP_Name());
-	            	jsonArr.put(jsonObj);
-	           	}
-	        }
-	         
-	        jsonTeamObj.put("nestedGroups", nest);
-	         
+		String teamId;
+		// 팀 id, 팀 이름, 그룹이름,
+		for (TeamVo teamVo : teamList) {
+			teamId = teamVo.getT_Id();
+
+			JSONObject jsonTeamObj = new JSONObject();
+
+			jsonTeamObj.put("id", teamId);
+			jsonTeamObj.put("className", teamVo.getT_Id());
+			jsonTeamObj.put("content", teamVo.getT_Name());
+			jsonTeamObj.put("showNested", false);
+			jsonArr.put(jsonTeamObj);
+
+			List<String> nest = new ArrayList<String>();
+
+			for (ProjectVo vo : projectList) {
+				if (teamId.equals(vo.getT_Id())) {
+					nest.add(vo.getP_Id());
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("id", vo.getP_Id());
+					jsonObj.put("content", vo.getP_Name());
+					jsonArr.put(jsonObj);
+				}
+			}
+
+			jsonTeamObj.put("nestedGroups", nest);
+
 		}
 		return jsonArr;
 	}
 
-   public JSONArray getProjectInformation(List<TeamVo> teamList, List<ProjectVo> projectList, List<MilestoneVo> milestone) throws JSONException {
-		
-	   JSONArray jsonArr = new JSONArray(); 
-	         
-	  	for (ProjectVo vo : projectList) {
-	    	JSONObject jsonObj = new JSONObject();
-	      	jsonObj.put("group"		, vo.getP_Id());
-	      	jsonObj.put("className"	, vo.getP_Id());
-	      	jsonObj.put("start"		, vo.getSt_Dt());
-	    	jsonObj.put("end"		, vo.getEd_Dt());
-	    	jsonObj.put("type"		, "background");
-	   		jsonObj.put("id"		, vo.getP_Id());
-	    	jsonObj.put("content"	, vo.getP_Name());
-	       	jsonArr.put(jsonObj);          	
-	  	}
-	        
-	  	for (MilestoneVo vo : milestone) {
-	        JSONObject jsonObj = new JSONObject();
-	        jsonObj.put("group"		, vo.getP_Id());
-	        jsonObj.put("start"		, vo.getMs_Dt());//마일스톤 날짜
-	        jsonObj.put("type"		, "point");
-	        jsonObj.put("id"		, "m"+vo.getMs_Id());
-	        jsonObj.put("content"	,"");
-	        jsonObj.put("title"	, vo.getMs_Cntnt());
-	        jsonArr.put(jsonObj);
-	            
+	public JSONArray getProjectInformation(List<ProjectVo> projectList, List<MilestoneVo> milestone)
+			throws JSONException {
+
+		JSONArray jsonArr = new JSONArray();
+
+		for (ProjectVo vo : projectList) {
+			JSONObject jsonObj = new JSONObject();
+
+			boolean isChangedSt = vo.getPlan_St_Dt() != vo.getSt_Dt();
+			boolean isChangedEd = vo.getPlan_Ed_Dt() != vo.getEd_Dt();
+
+			if (isChangedSt || isChangedEd) {
+				JSONObject jsonObj2 = new JSONObject();
+				jsonObj2.put("group", vo.getP_Id());
+				jsonObj2.put("start", vo.getPlan_St_Dt());
+				jsonObj2.put("end", vo.getPlan_Ed_Dt());
+				jsonObj2.put("type", "background");
+				jsonObj2.put("className", "expected");
+				jsonObj2.put("id", "p" + vo.getP_Id());
+				jsonObj2.put("content", vo.getP_Name() + "계획");
+				jsonArr.put(jsonObj2);
+			}
+
+			jsonObj.put("group", vo.getP_Id());
+			jsonObj.put("className", vo.getP_Id());
+			jsonObj.put("start", vo.getSt_Dt());
+			jsonObj.put("end", vo.getEd_Dt());
+			jsonObj.put("type", "background");
+			jsonObj.put("id", vo.getP_Id());
+			jsonObj.put("content", vo.getP_Name());
+
+			jsonArr.put(jsonObj);
+		}
+
+		for (MilestoneVo vo : milestone) {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("group", vo.getP_Id());
+			jsonObj.put("start", vo.getMs_Dt());// 마일스톤 날짜
+			jsonObj.put("type", "point");
+			jsonObj.put("id", "m" + vo.getMs_Id());
+			jsonObj.put("content", "");
+			jsonObj.put("title", vo.getMs_Cntnt());
+			jsonArr.put(jsonObj);
+
 		}
 		return jsonArr;
-   }
-   
-   // 공통 작업
-   public ModelAndView loadData(ModelAndView mav) throws JSONException{
-	   
-	   List<TeamVo> teamList = mainService.selectTeamList();
-	   mav.addObject("teamList", teamList);
-      
-	   List<ProjectVo> projectList = mainService.selectProjectList();
-	   mav.addObject("projectAllList", projectList);
-      
-	   List<MilestoneVo> milestoneList = mainService.selectAllMilestoneList();
-	   JSONArray jsonArr = getProjectInformation(teamList, projectList, milestoneList);
-	   mav.addObject("projectList", jsonArr);
+	}
 
-	   JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
-	   mav.addObject("projectGroup", jsonArrGroup);
-	   
-	   return mav;   
-   }
-   
-   /**
-    * 로드맵 변경이력 조회
-    */
-   @RequestMapping("/mileStone")
-   public String mileStone(Model model) {
-      
-      return "mileStone";
-   }
-   
-   /**
-    * 로드맵 변경이력
-    * @throws JSONException 
-    */
-   @RequestMapping("/roadmapHistory")
-   public ModelAndView roadmapHistory(Model model) throws JSONException {
-	   
-	   ModelAndView mav = new ModelAndView("roadmapHistory");
-	   
-	   loadData(mav);
-      
-	   return mav;
-   }
-   
-   /**
+	// 공통 작업
+	public ModelAndView loadData(ModelAndView mav) throws JSONException {
+
+		List<TeamVo> teamList = mainService.selectTeamList();
+		mav.addObject("teamList", teamList);
+
+		List<ProjectVo> projectList = mainService.selectProjectList();
+		mav.addObject("projectAllList", projectList);
+
+		List<MilestoneVo> milestoneList = mainService.selectAllMilestoneList();
+		JSONArray jsonArr = getProjectInformation(projectList, milestoneList);
+		mav.addObject("projectList", jsonArr);
+
+		JSONArray jsonArrGroup = getProjectGroup(teamList, projectList);
+		mav.addObject("projectGroup", jsonArrGroup);
+
+		return mav;
+	}
+
+	/**
+	 * 로드맵 변경이력 조회
+	 */
+	@RequestMapping("/mileStone")
+	public String mileStone(Model model) {
+
+		return "mileStone";
+	}
+
+	/**
+	 * 로드맵 변경이력
+	 * 
+	 * @throws JSONException
+	 */
+	@RequestMapping("/roadmapHistory")
+	public ModelAndView roadmapHistory(Model model) throws JSONException {
+
+		ModelAndView mav = new ModelAndView("roadmapHistory");
+
+		loadData(mav);
+
+		return mav;
+	}
+
+	/**
 	 * 이력 저장
 	 */
-	public int insertProjectHistory(ProjectVo projectVo, String division){
-		
+	public int insertProjectHistory(ProjectVo projectVo, String division) {
+
 		Date nowDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-		
+
 		HistoryVo historyVo = new HistoryVo();
-		if 		  (division.equals("1")) {	// 추가
+		if (division.equals("1")) { // 추가
 			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 추가");
-		} else if (division.equals("2")) {	// 수정
+		} else if (division.equals("2")) { // 수정
 			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 변경 : " + projectVo.getHis_Cntnt());
-		} else if (division.equals("3")) {	// 삭제
+		} else if (division.equals("3")) { // 삭제
 			historyVo.setHis_Cntnt(projectVo.getP_Name() + " 프로젝트 삭제");
 		}
 		historyVo.setHis_Id(sdf.format(nowDate).toString() + "00");
 		historyVo.setP_Id(projectVo.getP_Id());
 		historyVo.setT_Id(projectVo.getT_Id());
-		
+
 		return mainService.insertHistory(historyVo);
 	}
 }

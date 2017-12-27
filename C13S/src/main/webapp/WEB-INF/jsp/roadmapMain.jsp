@@ -46,8 +46,13 @@ body {
   background:#F0F8FF;
 }
 
+.vis-item.expected{
+  border-style:dashed!important;
+  z-index:0;
+};
+
 .vis-item {
-  border-color: #006fff;
+  border-color: white;
   background-color:greenyellow;
   font-size: 15px;
   color: #1a1a1a;
@@ -61,6 +66,7 @@ body {
 .vis-item.vis-dot {
   border-width: 5px;
   border-radius: 5px;
+  border-color: white;
 }
 
 .vis-item.vis-selected {
@@ -90,6 +96,19 @@ body {
 .vis-time-axis .vis-grid.vis-major {
   border-width: 2px;
   border-color: #7be6ff;
+}
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+   -ms-transform: scale(1.2); /* IE */
+   -moz-transform: scale(1.2); /* FF */
+   -webkit-transform: scale(1.2); /* Safari and Chrome */
+   -o-transform: scale(1.2); /* Opera */
+   padding: 10px; */
+}
+div.vis-item.vis-background.expected {
+	background: #f0f8ff
 }
 
 </style>
@@ -155,10 +174,14 @@ $(document).ready(function() {
         	$("#"+selProjectId).attr('checked', false);
         }
         
-        
         $("div.vis-item.vis-background").css("background", "#bfbfbf");
-        $("div.vis-item.vis-background."+selProjectId).css("background", "red");
+        $("div.vis-item.vis-background."+selProjectId).css("background", "#0069d9");
+        $("div.vis-item.vis-background.expected").css("background", "#f0f8ff");
+        
+//         toggleButton(selProjectId.length);
 	}
+	
+// 	toggleButton(0);
 	
 // 	$("div.vis-label.vis-nesting-group."+selProjectId+".expanded").on("click",function(){
 // 		console.log();
@@ -218,7 +241,6 @@ $(document).ready(function() {
  	/* ############## 버튼 이벤트  ################ */
 });
 
-
 function check(box){
 	
 	var nest = groups.get({
@@ -243,33 +265,44 @@ function check(box){
 	}
 }
 
+function toggleButton(flag) {
+	var $btnGroup = $("#modifyProjectBtn, #deleteProjectBtn, #registMilestoneBtn");
+	
+	if(flag > 0) { // selProjectId가 있으면
+		$btnGroup.removeClass("btn-default").addClass("btn-primary");
+		$btnGroup.disabled(false);
+	} else {
+		$btnGroup.removeClass("btn-primary").addClass("btn-default");
+		$btnGroup.disabled(true);
+	}
+}
+
 </script>
  
 </head>
 <body>
 	<div class="container-fluid">
 	  <div class="row">
-		<div class="col">
-			<h1>팀</h1>
+		<div class="col-2">
+			<h1><img src="/images/logo.png" width="220"/></h1>
 			<div class="form-check">
 				<c:forEach items="${teamList}" var="team">
-			 		<label class="form-check-label" for="teamId"><input class="form-check-input" type="checkbox" id="${team.t_Id}" value="${team.t_Id}" onClick="check(this)">${team.t_Name}</label><br>
+			 		<label class="form-check-label" for="${team.t_Id}"><input class="form-check-input" type="checkbox" id="${team.t_Id}" value="${team.t_Id}" onClick="check(this)">${team.t_Name}</label><br>
 				</c:forEach>
 			</div>
 		</div><!-- .left -->
 		
-		<div class="col-10">
-			<h1>슈어소프트테크</h1>
+		<div class="col-10" style="padding-top:20px;">
 			
-			<div class="btn-group" role="group">
-				<button type="button" class="btn btn-primary" id="registProjectBtn" data-toggle="modal" data-target="#registProjectModal" data-whatever="">프로젝트 등록</button>
-				<button type="button" class="btn btn-primary" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
-				<button type="button" class="btn btn-primary" id="deleteProjectBtn" data-toggle="modal" data-target="#deleteProjectModal" data-whatever="">프로젝트 삭제</button>
+			<div class="btn-group" role="group" >
+				<button type="button" class="btn btn-lg btn-primary" id="registProjectBtn" data-toggle="modal" data-target="#registProjectModal" data-whatever="">프로젝트 등록</button>
+				<button type="button" class="btn btn-lg btn-primary" id="modifyProjectBtn" data-toggle="modal" data-target="#modifyProjectModal" data-whatever="">프로젝트 수정</button>
+				<button type="button" class="btn btn-lg btn-primary" id="deleteProjectBtn" data-toggle="modal" data-target="#deleteProjectModal" data-whatever="">프로젝트 삭제</button>
 			</div>
 			
 			<div class="btn-group" role="group">
-				<button type="button" class="btn btn-primary" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤 추가</button>
-				<button type="button" class="btn btn-primary" id="goHistory">로그 확인</button>
+				<button type="button" class="btn btn-lg btn-primary" id="registMilestoneBtn" data-toggle="modal" data-target="#milestoneModal" data-whatever="">마일스톤</button>
+				<button type="button" class="btn btn-lg btn-primary" id="goHistory">로그 확인</button>
 			</div>
 			
 			<div style="margin-top:10px">

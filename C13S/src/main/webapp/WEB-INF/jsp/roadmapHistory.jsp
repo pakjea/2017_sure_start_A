@@ -33,6 +33,7 @@ String contextPath = request.getContextPath();
 		background: #f0f0f0;
 		border-right-color: silver;
 		border-right-style: solid;
+	}
 	 </style>
 	 
 	 <script src="/js/jquery-1.7.min.js"></script>
@@ -48,14 +49,14 @@ String contextPath = request.getContextPath();
 	var dataView = new Slick.Data.DataView();
 	var grid;
 	var columns = [
-		{id: "rgst_Dt", name: "일자", field: "rgst_Dt", formatter: Slick.Formatters.yymmddhhmiss},
-		{id: "his_Cntnt", name: "내용", field: "his_Cntnt"},
-		{id: "emp_Name", name: "마일스톤 작성자", field: "emp_Name"},
+		{id: "rgst_Dt", name: "일자", field: "rgst_Dt", width: 250, formatter: Slick.Formatters.yymmddhhmiss, cssClass: "cell-centered"},
+		{id: "his_Cntnt", name: "내용", field: "his_Cntnt", width: 880},
+		{id: "emp_Name", name: "마일스톤 작성자", field: "emp_Name", width: 170},
 	];
 	var options = {
 		enableCellNavigation: true,
 		enableColumnReorder: false,
-		forceFitColumns: true,
+		forceFitColumns: true
 	}
 	
 	//Make the grid respond to DataView change events.
@@ -139,7 +140,7 @@ String contextPath = request.getContextPath();
     	
 		<div class="row">	
 			<div class="col-12" style="position: relative;">
-		    	<div id="myGrid" style="height:850px;margin:5px;"></div>
+		    	<div id="myGrid" style="height:700px;margin:5px;"></div>
 		    </div>
 	    </div>
     </div>
